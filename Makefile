@@ -16,7 +16,7 @@ OBJ		= $(SRC:.c=.o)
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):	$(LIBFT) $(OBJ)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft -lreadline
 
 $(LIBFT):
 			$(MAKE) -C $(LIBFT_DIR)

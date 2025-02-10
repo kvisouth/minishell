@@ -6,15 +6,15 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/02/03 15:24:32 by kevso            ###   ########.fr       */
+/*   Updated: 2025/02/10 16:30:18 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// #include <readline/readline.h>
-// #include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -34,7 +34,9 @@
 
 typedef struct s_shell
 {
+	bool	end;
 	char	**env;
+	char	*cmdline;
 }	t_shell;
 
 char	**init_shell_env(char **envp);
