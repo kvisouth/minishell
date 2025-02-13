@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/02/10 16:30:18 by kevso            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:04:53 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,22 @@
 # include <term.h>
 # include "../libft/libft.h"
 
+typedef struct s_lexer
+{
+	char	**tokens;
+	int		token_count;
+}	t_lexer;
+
 typedef struct s_shell
 {
 	bool	end;
 	char	**env;
 	char	*cmdline;
+	t_lexer	lexer;
 }	t_shell;
 
+
 char	**init_shell_env(char **envp);
+int		lexer(t_lexer *lexer, char *cmdline);
 
 #endif

@@ -1,5 +1,4 @@
-SRC		=	src/main.c \
-			src/init_env.c \
+SRC		= $(wildcard src/*.c) #ENLEVER WILDCARD AVANT CORRECTION
 
 NAME	= minishell
 CC		= cc

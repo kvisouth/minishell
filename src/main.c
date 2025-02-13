@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/02/10 16:29:48 by kevso            ###   ########.fr       */
+/*   Updated: 2025/02/11 16:04:59 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	g_sig;
 
-// void	start_minishell(t_shell *shell)
-// {
-// 	shell->end = false;
-// 	if (!lexer(shell))
-// 	{
-// 		free(shell->cmdline);
-// 		return ;
-// 	}
-// }
+void	start_minishell(t_shell *shell)
+{
+	shell->end = false;
+	if (!lexer(&shell->lexer, shell->cmdline))
+	{
+		free(shell->cmdline);
+		return ;
+	}
+}
 
 void	sig_handler(int sig)
 {
@@ -54,7 +54,7 @@ void	minishell_loop(t_shell *shell)
 		}
 		add_history(cmdline);
 		shell->cmdline = cmdline;
-		// start_minishell(shell);
+		start_minishell(shell);
 	}
 }
 
