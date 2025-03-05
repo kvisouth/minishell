@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/05 01:05:06 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/05 01:06:49 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,5 @@ int	lexer(t_lexer *lex, char *cmdline)
 	printf("new_cmdline: %s\n", new_cmdline);
 	return (1);
 	(void)lex;
+	(void)cmdline;
 }
