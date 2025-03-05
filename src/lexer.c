@@ -6,96 +6,48 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/02/11 16:10:44 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/05 01:05:06 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/* Return the nb of tokens in the string (skip the quotes) */
-int	count_tokens(char *str, char *sep)
+// adds a spaces before and after operators if they are not already there
+// operators are : |, ;, <, >, &
+char	*add_spaces_to_cmdline(char *cmdline)
 {
-	bool	in_quote;
-	int		count;
+	char	*new_cmdline;
 	int		i;
 
-	in_quote = false;
-	count = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '\"')
-		{
-			if (in_quote == false)
-				in_quote = true;
-			else
-				in_quote = false;
-		}
-		if (in_quote == false && ft_strchr(sep, str[i]))
-			count++;
-		i++;
-	}
-	return (count + 1);
-}
-
-/*
-Splits the string into a char ** array of tokens, based on separators.
-It ignores separators if it is between double or single quotes.
-*/
-char	**tokenize(char *str, char *sep)
-{
-	bool	in_quote;
-	char	**tokens;
-	int		i;
-	int		j;
-
-	in_quote = false;
-	tokens = ft_calloc(count_tokens(str, sep) + 1, sizeof(char *));
-	if (!tokens)
+	new_cmdline = ft_calloc(ft_strlen(cmdline) * 2 + 1, sizeof(char));
+	if (!new_cmdline)
 		return (NULL);
 	i = 0;
-	j = 0;
-	while (str[i])
+	while (cmdline[i])
 	{
-		if (str[i] == '\'' || str[i] == '\"')
+		if (cmdline[i] == '|' || cmdline[i] == ';' || cmdline[i] == '<' || cmdline[i] == '>' || cmdline[i] == '&')
 		{
-			if (in_quote == false)
-				in_quote = true;
-			else
-				in_quote = false;
+			if (i > 0 && cmdline[i - 1] != ' ')
+				ft_strlcat(new_cmdline, " ", ft_strlen(new_cmdline) + 2);
+			ft_strlcat(new_cmdline, &cmdline[i], ft_strlen(new_cmdline) + 2);
+			if (cmdline[i + 1] && cmdline[i + 1] != ' ')
+				ft_strlcat(new_cmdline, " ", ft_strlen(new_cmdline) + 2);
 		}
-		if (in_quote == false && ft_strchr(sep, str[i]))
-		{
-			tokens[j] = ft_substr(str, 0, i);
-			if (!tokens[j])
-				return (NULL);
-			str += i + 1;
-			i = 0;
-			j++;
-		}
+		else
+			ft_strlcat(new_cmdline, &cmdline[i], ft_strlen(new_cmdline) + 2);
 		i++;
 	}
-	tokens[j] = ft_strdup(str);
-	if (!tokens[j])
-		return (NULL);
-	return (tokens);
+	return (new_cmdline);
 }
 
-/*
-Lexer will "tokenize" the input string into a list of tokens.
-
-minshell> grep if < main.c | cat -e > output.txt
-will be tokenized into:
-["grep", "if", "<", "main.c", "|", "cat", "-e", ">", "output.txt"]
-*/
 int	lexer(t_lexer *lex, char *cmdline)
 {
-	lex->token_count = count_tokens(cmdline, " \t\n\r\a");
-	printf("Token count: %d\n", lex->token_count);
-	lex->tokens = tokenize(cmdline, " \t\n\r\a");
-	if (!lex->tokens)
+	char	*new_cmdline;
+
+	new_cmdline = add_spaces_to_cmdline(cmdline);
+	if (!new_cmdline)
 		return (0);
-	for (int i = 0; i < lex->token_count; i++)
-		printf("Token %d: %s\n", i, lex->tokens[i]);
+	printf("new_cmdline: %s\n", new_cmdline);
 	return (1);
+	(void)lex;
 }
