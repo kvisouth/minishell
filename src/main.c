@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/02/11 16:04:59 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/07 15:27:05 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	g_sig;
 void	start_minishell(t_shell *shell)
 {
 	shell->end = false;
-	if (!lexer(&shell->lexer, shell->cmdline))
+	if (!lexer(shell))
 	{
 		free(shell->cmdline);
 		return ;
