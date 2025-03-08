@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:53:04 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/07 16:50:53 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/08 22:15:13 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char	**split_tokens(char *str, t_lexer *lex)
 	char	**tokens;
 	int		i;
 	int		j;
+	int		start;
 
 	tokens = malloc(sizeof(char *) * (lex->token_count + 1));
 	if (!tokens)
@@ -58,28 +59,14 @@ char	**split_tokens(char *str, t_lexer *lex)
 	lex->inside_quotes = false;
 	while (str[i])
 	{
-		if (str[i] == '\'' || str[i] == '\"')
-		{
-			if (lex->inside_quotes && str[i] == lex->quote_char)
-				lex->inside_quotes = false;
-			else if (!lex->inside_quotes)
-			{
-				lex->inside_quotes = true;
-				lex->quote_char = str[i];
-			}
-		}
-		if (!lex->inside_quotes && str[i] == ' ')
-		{
-			str[i] = '\0';
+		while (str[i] && (str[i] == ' ' && !lex->inside_quotes))
 			i++;
-			continue ;
-		}
-		if (i == 0 || str[i - 1] == '\0')
-		{
-			tokens[j] = &str[i];
-			j++;
-		}
-		i++;
+		start = i;
+		while (str[i] && (lex->inside_quotes || str[i] != ' '))
+			update_quote_status(lex, str[i++]);
+		if (i > start)
+			tokens[j++] = ft_substr(str, start, i - start);
+
 	}
 	tokens[j] = NULL;
 	return (tokens);
