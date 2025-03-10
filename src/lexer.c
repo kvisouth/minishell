@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/07 16:30:52 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/10 16:58:47 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	lexer(t_shell *shell)
 {
+	if (shell->cmdline[0] == '\0' || shell->cmdline[0] == '\n')
+		return (0);
 	shell->new_cmdline = add_spaces_to_cmdline(shell->cmdline, &shell->lexer);
 	if (!shell->new_cmdline)
 		return (0);

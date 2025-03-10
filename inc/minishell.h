@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/09 16:21:13 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/09 16:26:45 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <curses.h>
 # include <term.h>
 # include "../libft/libft.h"
+# include "parser.h"
 # include "lexer.h"
 
 typedef struct s_shell
@@ -40,6 +41,9 @@ typedef struct s_shell
 	char	*cmdline;
 	char	*new_cmdline;
 	t_lexer	lexer;
+	t_cmd           *cmd;           // Root of the command tree
+    t_parser        parser;         // Parser state
+
 }	t_shell;
 
 char	**init_shell_env(char **envp);
