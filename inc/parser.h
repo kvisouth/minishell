@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/10 17:12:47 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/10 20:49:19 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,19 @@ int	is_redirection(char *token);
 int	is_pipe(char *token);
 int	is_operator(char *token);
 int	ft_strcmp(const char *s1, const char *s2);
+char    *peek_token(t_shell *shell);
+char    *next_token(t_shell *shell);
+
 
 /* Function prototypes for parser */
-int     parser(t_shell *shell);
-t_cmd   *parse_command(t_shell *shell);
-t_cmd   *parse_pipeline(t_shell *shell);
-t_cmd   *parse_simple_command(t_shell *shell);
-t_redir *parse_redirection(t_shell *shell, char *token);
-void    free_cmd(t_cmd *cmd);
+t_redir	*parse_redirection(char *token);
+t_cmd	*handle_redirection(t_cmd *cmd, t_shell *shell);
+void	fill_arguments(t_cmd *cmd, t_shell *shell);
+t_cmd	*parse_simple_command(t_shell *shell);
+t_cmd	*parse_pipeline(t_shell *shell);
+int		parser(t_shell *shell);
+void	free_cmd(t_cmd *cmd);
+
+
 
 #endif
