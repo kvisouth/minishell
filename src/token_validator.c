@@ -6,13 +6,13 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/10 17:52:16 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/10 20:59:56 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*  */
+/*  Check if the first token is a pipe */
 int	handle_pipe(t_shell *shell, int token_count)
 {
 	if (is_pipe(shell->lexer.tokens[0]))
@@ -28,6 +28,7 @@ int	handle_pipe(t_shell *shell, int token_count)
 	return (1);
 }
 
+// Check if there are two consecutive operators
 int handle_operator(t_shell *shell, int token_count, int i)
 {
 	if (i < token_count - 1 && is_operator(shell->lexer.tokens[i]) && 
@@ -48,6 +49,7 @@ int handle_operator(t_shell *shell, int token_count, int i)
 	return (1);
 }
 
+// Check if there is a redirection without a target
 int handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
 {
 	*skip = 0;
@@ -62,7 +64,7 @@ int handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
 	}
 	return (1);
 }
-
+// Check if there is an empty command between two pipes
 int	handle_empty_command_between_pipe(t_shell *shell, int token_count, int i)
 {
 	if (i > 0 && i < token_count - 1 && 
@@ -73,7 +75,7 @@ int	handle_empty_command_between_pipe(t_shell *shell, int token_count, int i)
 	}
 	return (1);
 }
-
+// main function to validate tokens
 int	validate_tokens(t_shell *shell)
 {
 	int	i;
