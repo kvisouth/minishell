@@ -6,7 +6,11 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/10 17:54:28 by abreuil          ###   ########.fr       */
+=======
+/*   Updated: 2025/03/09 16:55:22 by kevso            ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +23,11 @@ int	lexer(t_shell *shell)
 	shell->new_cmdline = add_spaces_to_cmdline(shell->cmdline, &shell->lexer);
 	if (!shell->new_cmdline)
 		return (0);
-	printf("\nnew_cmdline: %s\n\n", shell->new_cmdline);
 	shell->lexer.token_count = count_tokens(shell->new_cmdline, &shell->lexer);
-	printf("token_count: %d\n\n", shell->lexer.token_count);
 	shell->lexer.tokens = split_tokens(shell->new_cmdline, &shell->lexer);
 	if (!shell->lexer.tokens)
 		return (0);
+<<<<<<< HEAD
 	int i = 0;
 	while (shell->lexer.tokens[i])
 	{
@@ -37,6 +40,8 @@ int	lexer(t_shell *shell)
 		shell->lexer.tokens = NULL;
 		return (0);
 	}
+=======
+>>>>>>> origin/main
 	return (1);
 }
 
