@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/09 16:26:30 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:12:47 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,14 @@ typedef struct s_parser
     int             token_index;    // Current token index
     int             token_count;    // Total number of tokens
 } t_parser;
+
+/* Token validation */
+int	validate_tokens_for_parser(t_shell *shell);
+int	validate_tokens(t_shell *shell);
+int	is_redirection(char *token);
+int	is_pipe(char *token);
+int	is_operator(char *token);
+int	ft_strcmp(const char *s1, const char *s2);
 
 /* Function prototypes for parser */
 int     parser(t_shell *shell);

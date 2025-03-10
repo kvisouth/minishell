@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/10 16:58:47 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:54:28 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ int	lexer(t_shell *shell)
 	{
 		printf("token[%d]: %s\n", i, shell->lexer.tokens[i]);
 		i++;
+	}
+	if (!validate_tokens_for_parser(shell))
+	{
+		free_tab(shell->lexer.tokens);
+		shell->lexer.tokens = NULL;
+		return (0);
 	}
 	return (1);
 }

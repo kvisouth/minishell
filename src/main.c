@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/07 15:27:05 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/10 17:57:14 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,31 @@ void	minishell_loop(t_shell *shell)
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	shell;
-
+    char *cmdline;
+    
+    printf("=== Token Validator Test ===\n");
+    printf("Enter commands to test (Ctrl+D to exit test mode):\n");
+    
+    while (1)
+    {
+        printf("test> ");
+        cmdline = readline(NULL);
+        if (!cmdline)
+            break;
+            
+        shell.cmdline = cmdline;
+        if (lexer(&shell))
+        {
+            printf("Input: '%s' - VALID\n", cmdline);
+        }
+        else
+        {
+            printf("Input: '%s' - INVALID\n", cmdline);
+        }
+        
+        free(cmdline);
+    }
+    printf("=== Test completed ===\n");
 	if (ac != 1 && av)
 		return (1);
 	shell.env = NULL;

@@ -6,15 +6,16 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/10 16:42:05 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:54:56 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "../inc/minishell.h"
+
 ///* initializing parser */
 //static void initialize_parser(t_shell *shell)
 //{
-//	shell->parser.tokens = shell->lexer->tokens;
+//	shell->parser.tokens = shell->lexer.tokens;
 //	shell->parser.token_index = 0;
 //	shell->parser.token_count = shell->lexer.token_count;
 //	shell->cmd = NULL;
@@ -78,4 +79,5 @@
 //{
 //	initialize_parser(shell);
 //	shell -> cmd = parse_command(shell);
+//	return (shell->cmd != NULL);
 //}
