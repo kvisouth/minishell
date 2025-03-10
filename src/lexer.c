@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/10 17:54:28 by abreuil          ###   ########.fr       */
-=======
-/*   Updated: 2025/03/09 16:55:22 by kevso            ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/03/10 23:16:18 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +23,6 @@ int	lexer(t_shell *shell)
 	shell->lexer.tokens = split_tokens(shell->new_cmdline, &shell->lexer);
 	if (!shell->lexer.tokens)
 		return (0);
-<<<<<<< HEAD
 	int i = 0;
 	while (shell->lexer.tokens[i])
 	{
@@ -40,8 +35,6 @@ int	lexer(t_shell *shell)
 		shell->lexer.tokens = NULL;
 		return (0);
 	}
-=======
->>>>>>> origin/main
 	return (1);
 }
 
