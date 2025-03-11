@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/10 20:47:37 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 13:14:03 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include "../libft/libft.h"
 # include "parser.h"
 # include "lexer.h"
+# include "exec.h"
 
 typedef struct s_shell
 {
