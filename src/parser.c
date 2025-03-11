@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 16:53:40 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 17:13:06 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_simple_cmds *create_simple_cmd(void)
     if (!cmd)
         return (NULL);
     cmd->str = NULL;
-    cmd->builtin = NULL;
+    cmd->builtin = false;
     cmd->num_redirections = 0;
     cmd->hd_file_name = NULL;
     cmd->redirections = NULL;
