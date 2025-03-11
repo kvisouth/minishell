@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/10 23:16:18 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/11 13:05:37 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@ int	lexer(t_shell *shell)
 	shell->lexer.tokens = split_tokens(shell->new_cmdline, &shell->lexer);
 	if (!shell->lexer.tokens)
 		return (0);
-	int i = 0;
-	while (shell->lexer.tokens[i])
-	{
-		printf("token[%d]: %s\n", i, shell->lexer.tokens[i]);
-		i++;
-	}
 	if (!validate_tokens_for_parser(shell))
 	{
 		free_tab(shell->lexer.tokens);
