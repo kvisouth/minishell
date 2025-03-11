@@ -6,21 +6,22 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 17:02:21 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/11 17:21:14 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* Returns the exit status */
-// int	exec(t_shell *shell)
-// {
-// 	int	i;
+int	exec(t_shell *shell)
+{
+	(void)shell;
+	// int	i;
 
-// 	i = 0;
-// 	while (i < shell->nb_cmds)
-// 	{
+	// i = 0;
+	// while (i < shell->nb_cmds)
+	// {
 		
-// 	}
-// 	return (0);
-// }
+	// }
+	return (0);
+}

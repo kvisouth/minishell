@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 16:22:44 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 17:20:44 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ typedef struct s_shell
 	char	**env;
 	char	*cmdline;
 	char	*new_cmdline;
+	int		nb_cmds;
 	t_lexer	lexer;
 	t_simple_cmds	*simple_cmds;
     t_parser        parser;         // Parser state
-
 }	t_shell;
 
 char	**init_shell_env(char **envp);
