@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/11 14:57:36 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/11 16:47:03 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ typedef enum e_redir_type
     REDIR_HEREDOC   // Here document (<<)
 } t_redir_type;
 
+typedef struct s_tools
+{
+	char					*args;
+	char					**paths;
+	char					**envp;
+	struct s_simple_cmds	*simple_cmds;
+	t_lexer					*lexer_list;
+	char					*pwd;
+	char					*old_pwd;
+	int						pipes;
+	int						*pid;
+	bool					heredoc;
+	bool					reset;
+}	t_tools;
+
 /* Redirection structure */
 typedef struct s_redir
 {
@@ -58,14 +73,16 @@ typedef struct s_redir
 } t_redir;
 
 /* Command structure */
-typedef struct s_cmd
+typedef struct s_simple_cmds
 {
-    t_cmd_type      type;
-    char            **args;         // Command arguments (args[0] is the command)
-    t_redir         *redirects;     // Linked list of redirections
-    struct s_cmd    *prev;          // Left command in a pipeline
-    struct s_cmd    *next;         // Right command in a pipeline
-} t_cmd;
+	char                    **str;
+	int                     (*builtin)(t_tools *, struct s_simple_cmds *);
+	int                     num_redirections;
+	char                    *hd_file_name;
+	t_lexer                 *redirections;
+	struct s_simple_cmds	*next;
+	struct s_simple_cmds	*prev;
+}	t_simple_cmds;
 
 /* Parser structure */
 typedef struct s_parser
@@ -84,16 +101,30 @@ int	is_operator(char *token);
 int	ft_strcmp(const char *s1, const char *s2);
 char    *peek_token(t_shell *shell);
 char    *next_token(t_shell *shell);
+int   check_consecutive_ops(char *curr_token, char *next_token);
+int  handle_operator(t_shell *shell, int token_count, int i);
+int  handle_no_redirect(t_shell *shell, int token_count, int i, int *skip);
+int  handle_empty_command_between_pipe(t_shell *shell, int token_count, int i);
+int handle_pipe(t_shell *shell, int token_count);
+
 
 
 /* Function prototypes for parser */
 t_redir	*parse_redirection(char *token);
-t_cmd	*handle_redirection(t_cmd *cmd, t_shell *shell);
-void	fill_arguments(t_cmd *cmd, t_shell *shell);
-t_cmd	*parse_simple_command(t_shell *shell);
-t_cmd	*parse_pipeline(t_shell *shell);
+t_simple_cmds	*handle_redirection(t_simple_cmds *cmd, t_shell *shell);
+void	fill_arguments(t_simple_cmds *cmd, t_shell *shell);
+t_simple_cmds	*parse_simple_command(t_shell *shell);
+t_simple_cmds	*parse_pipeline(t_shell *shell);
 int		parser(t_shell *shell);
-void	free_cmd(t_cmd *cmd);
+void	free_cmd(t_simple_cmds *cmd);
+
+// test functions
+void print_commands(t_simple_cmds *cmds);
+void test_parser(void);
+void init_shell(t_shell *shell);
+void free_shell(t_shell *shell);
+int  tokenize(t_shell *shell, char *input);
+
 
 
 

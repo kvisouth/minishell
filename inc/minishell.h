@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 13:14:03 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/11 16:22:44 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_shell
 	char	*cmdline;
 	char	*new_cmdline;
 	t_lexer	lexer;
-	t_cmd           *cmd;           // Root of the command tree
+	t_simple_cmds	*simple_cmds;
     t_parser        parser;         // Parser state
 
 }	t_shell;

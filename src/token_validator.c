@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/10 20:59:56 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:37:34 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,23 @@ int	handle_pipe(t_shell *shell, int token_count)
 // Check if there are two consecutive operators
 int handle_operator(t_shell *shell, int token_count, int i)
 {
-	if (i < token_count - 1 && is_operator(shell->lexer.tokens[i]) && 
-		is_operator(shell->lexer.tokens[i + 1]))
+	char *curr_token;
+	char *next_token;
+	
+	curr_token = shell->lexer.tokens[i];
+	if (i < token_count - 1)
+		next_token = shell->lexer.tokens[i + 1];
+	else
+		next_token = NULL;
+	if (ft_strlen(curr_token) > 2 &&
+		(curr_token[0] == '>' || curr_token[0] == '<'))
 	{
-		if ((ft_strcmp(shell->lexer.tokens[i], "<") == 0 && 
-			ft_strcmp(shell->lexer.tokens[i + 1], "<") == 0) ||
-			(ft_strcmp(shell->lexer.tokens[i], ">") == 0 && 
-			ft_strcmp(shell->lexer.tokens[i + 1], ">") == 0))
-		{
-			return (1);
-		}
 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-		ft_putstr_fd(shell->lexer.tokens[i + 1], 2);
+		ft_putstr_fd(curr_token, 2);
 		ft_putstr_fd("'\n", 2);
 		return (0);
 	}
+	check_consecutive_ops(curr_token, next_token);
 	return (1);
 }
 

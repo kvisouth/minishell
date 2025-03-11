@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 13:23:48 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/11 16:47:24 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ void	start_minishell(t_shell *shell)
 		free(shell->cmdline);
 		return ;
 	}
-	// if (!parser(shell))
-	// {
-	// 	return ;
-	// }
+	 if (!parser(shell))
+	 {
+	 	return ;
+	 }
+	print_commands(shell->simple_cmds);
 	if (!exec(shell))
 	{
 		return ;
@@ -69,31 +70,30 @@ void	minishell_loop(t_shell *shell)
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	shell;
-    char *cmdline;
+    //char *cmdline;
+    //printf("=== Token Validator Test ===\n");
+    //printf("Enter commands to test (Ctrl+D to exit test mode):\n");
     
-    printf("=== Token Validator Test ===\n");
-    printf("Enter commands to test (Ctrl+D to exit test mode):\n");
-    
-    while (1)
-    {
-        printf("test> ");
-        cmdline = readline(NULL);
-        if (!cmdline)
-            break;
+    //while (1)
+    //{
+    //    printf("test> ");
+    //    cmdline = readline(NULL);
+    //    if (!cmdline)
+    //        break;
             
-        shell.cmdline = cmdline;
-        if (lexer(&shell))
-        {
-            printf("Input: '%s' - VALID\n", cmdline);
-        }
-        else
-        {
-            printf("Input: '%s' - INVALID\n", cmdline);
-        }
+    //    shell.cmdline = cmdline;
+    //    if (lexer(&shell))
+    //    {
+    //        printf("Input: '%s' - VALID\n", cmdline);
+    //    }
+    //    else
+    //    {
+    //        printf("Input: '%s' - INVALID\n", cmdline);
+    //    }
         
-        free(cmdline);
-    }
-    printf("=== Test completed ===\n");
+    //    free(cmdline);
+    //}
+    //printf("=== Test completed ===\n");
 	if (ac != 1 && av)
 		return (1);
 	shell.env = NULL;
