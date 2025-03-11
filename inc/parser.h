@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/10 20:49:19 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 14:57:36 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ typedef struct s_cmd
     t_cmd_type      type;
     char            **args;         // Command arguments (args[0] is the command)
     t_redir         *redirects;     // Linked list of redirections
-    struct s_cmd    *left;          // Left command in a pipeline
-    struct s_cmd    *right;         // Right command in a pipeline
+    struct s_cmd    *prev;          // Left command in a pipeline
+    struct s_cmd    *next;         // Right command in a pipeline
 } t_cmd;
 
 /* Parser structure */
