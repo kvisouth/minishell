@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/11 16:47:03 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 17:14:20 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ typedef struct s_redir
 typedef struct s_simple_cmds
 {
 	char                    **str;
-	int                     (*builtin)(t_tools *, struct s_simple_cmds *);
+	bool                    builtin;
 	int                     num_redirections;
 	char                    *hd_file_name;
-	t_lexer                 *redirections;
+    t_redir                 *redirections;
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
