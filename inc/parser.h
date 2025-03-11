@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/11 17:14:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 17:29:40 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,6 @@ typedef enum e_redir_type
     REDIR_HEREDOC   // Here document (<<)
 } t_redir_type;
 
-typedef struct s_tools
-{
-	char					*args;
-	char					**paths;
-	char					**envp;
-	struct s_simple_cmds	*simple_cmds;
-	t_lexer					*lexer_list;
-	char					*pwd;
-	char					*old_pwd;
-	int						pipes;
-	int						*pid;
-	bool					heredoc;
-	bool					reset;
-}	t_tools;
-
 /* Redirection structure */
 typedef struct s_redir
 {
@@ -72,14 +57,10 @@ typedef struct s_redir
     struct s_redir  *next;
 } t_redir;
 
-/* Command structure */
+// command structure with arguments
 typedef struct s_simple_cmds
 {
-	char                    **str;
-	bool                    builtin;
-	int                     num_redirections;
-	char                    *hd_file_name;
-    t_redir                 *redirections;
+	char                    **str; // command and arguments
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
 }	t_simple_cmds;
