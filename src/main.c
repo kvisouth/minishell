@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/10 20:50:21 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/11 13:23:48 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void	start_minishell(t_shell *shell)
 	if (!lexer(shell))
 	{
 		free(shell->cmdline);
+		return ;
+	}
+	// if (!parser(shell))
+	// {
+	// 	return ;
+	// }
+	if (!exec(shell))
+	{
 		return ;
 	}
 }
