@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 17:29:27 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/12 02:27:30 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int validate_tokens_for_parser(t_shell *shell)
+static void init_parser(t_parser *parser, t_lexer *lexer)
 {
-    if (!validate_tokens(shell))
-        return (0);
-    return (1);
+    parser->tokens = lexer->tokens;
+    parser->token_count = lexer->token_count;
+    parser->token_index = 0;
 }
 
 t_simple_cmds *create_simple_cmd(void)
@@ -27,83 +27,11 @@ t_simple_cmds *create_simple_cmd(void)
     if (!cmd)
         return (NULL);
     cmd->str = NULL;
+    cmd->redirects = NULL;
     cmd->next = NULL;
     cmd->prev = NULL;
+    cmd->builtin = false;
     return (cmd);
-}
-
-int count_args_till_pipe(t_shell *shell, int start_idx)
-{
-    int i;
-    int count;
-
-    i = start_idx;
-    count = 0;
-    while (i < shell->lexer.token_count && !is_pipe(shell->lexer.tokens[i]))
-    {
-        if (is_redirection(shell->lexer.tokens[i]))
-            i += 2; // Skip the redirection and its target
-        else
-        {
-            count++;
-            i++;
-        }
-    }
-    return (count);
-}
-
-int parser(t_shell *shell)
-{
-    int i;
-    int j;
-    int arg_count;
-    t_simple_cmds *current;
-    t_simple_cmds *prev;
-
-    if (!validate_tokens_for_parser(shell))
-        return (0);
-    i = 0;
-    prev = NULL;
-    shell->simple_cmds = NULL;
-    while (i < shell->lexer.token_count)
-    {
-        // Create a new command node
-        current = create_simple_cmd();
-        if (!current)
-            return (0);
-        if (prev)
-        {
-            prev->next = current;
-            current->prev = prev;
-        }
-        else
-            shell->simple_cmds = current;
-        arg_count = count_args_till_pipe(shell, i);
-        current->str = (char **)malloc(sizeof(char *) * (arg_count + 1));
-        if (!current->str)
-            return (0);
-        j = 0;
-        while (j < arg_count && i < shell->lexer.token_count)
-        {
-            if (is_redirection(shell->lexer.tokens[i]))
-            {
-                i += 2;
-                continue;
-            }
-            else if (is_pipe(shell->lexer.tokens[i]))
-                break;
-                
-            current->str[j] = ft_strdup(shell->lexer.tokens[i]);
-            j++;
-            i++;
-        }
-        current->str[j] = NULL;
-        if (i < shell->lexer.token_count && is_pipe(shell->lexer.tokens[i]))
-            i++;
-            
-        prev = current;
-    }
-    return (1);
 }
 
 void print_commands(t_simple_cmds *cmds)
