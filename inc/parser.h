@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 02:03:31 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/12 16:54:47 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,16 @@ int handle_pipe(t_shell *shell, int token_count);
 
 
 /* Function prototypes for parser */
-t_redir	*parse_redirection(char *token);
+t_redir	*parse_redirection(t_shell *shell);
 t_simple_cmds	*handle_redirection(t_simple_cmds *cmd, t_shell *shell);
 void	fill_arguments(t_simple_cmds *cmd, t_shell *shell);
-t_simple_cmds	*parse_simple_command(t_shell *shell);
+t_simple_cmds	*parse_simple_comd(t_shell *shell);
 t_simple_cmds	*parse_pipeline(t_shell *shell);
 int		parser(t_shell *shell);
-void	free_cmd(t_simple_cmds *cmd);
+t_simple_cmds    *alloc_cmd_args(t_simple_cmds *cmd, int word_count);
+t_simple_cmds	*create_simple_cmd(void);
+void	init_parser(t_parser *parser, t_lexer *lexer);
+
 
 // test functions
 void print_commands(t_simple_cmds *cmds);
@@ -107,6 +110,18 @@ void test_parser(void);
 void init_shell(t_shell *shell);
 void free_shell(t_shell *shell);
 int  tokenize(t_shell *shell, char *input);
+
+// parser_utils.c
+int	is_redirection(char *token);
+int	is_pipe(char *token);
+int	is_operator(char *token);
+int	ft_strcmp(const char *s1, const char *s2);
+void    check_if_builtin(t_simple_cmds *cmd);
+int	count_words(t_shell *shell);
+int add_argument(t_simple_cmds *cmd, char *word, int i);
+int	process_token(t_shell *shell, t_simple_cmds *cmd, int *i);
+void	free_simple_cmd(t_simple_cmds *cmd);
+int add_redirection(t_simple_cmds *cmd, t_redir *redir);
 
 
 
