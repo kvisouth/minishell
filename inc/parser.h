@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 16:54:47 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/12 17:22:13 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ t_simple_cmds	*parse_pipeline(t_shell *shell);
 int		parser(t_shell *shell);
 t_simple_cmds    *alloc_cmd_args(t_simple_cmds *cmd, int word_count);
 t_simple_cmds	*create_simple_cmd(void);
-void	init_parser(t_parser *parser, t_lexer *lexer);
 
 
 // test functions
