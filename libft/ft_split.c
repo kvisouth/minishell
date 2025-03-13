@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:57:05 by kevisout          #+#    #+#             */
-/*   Updated: 2025/01/20 15:11:13 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/13 16:53:38 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	free_all(char **tab)
 }
 
 /* Retourne le nombre de mots dont split a besoin pour malloc */
-int	count_words(char const *s, char sep)
+static int	count_words(char const *s, char sep)
 {
 	int	cpt;
 	int	i;
@@ -46,7 +46,7 @@ int	count_words(char const *s, char sep)
 }
 
 /* Retourne le mot que split doit ranger dans son tableau */
-char	*dup_str(char const *s, char sep)
+static char	*dup_str(char const *s, char sep)
 {
 	int		i;
 	int		j;
