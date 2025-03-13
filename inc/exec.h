@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 13:26:24 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 00:05:35 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include "../inc/minishell.h"
 
+typedef struct s_shell t_shell;
+
+int	add_path_to_cmd(t_shell *shell);
 int	exec(t_shell *shell);
+int	execute_command(t_shell *shell);
 
 #endif
