@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/13 16:57:55 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 16:02:30 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	cmd_have_no_path(char *cmd)
 		return (0);
 	return (1);
 }
+
 
 /* Returns the exit status */
 int	exec(t_shell *shell)
@@ -33,10 +34,9 @@ int	exec(t_shell *shell)
 					return (0);
 			}
 		}
-		// at this state, commands are ready to be executed
 		execute_command(shell);
 		shell->simple_cmds = shell->simple_cmds->next;
 	}
+	wait(NULL);
 	return (0);
-	(void)shell;
 }
