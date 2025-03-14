@@ -6,25 +6,26 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 15:29:45 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 16:41:19 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 19:17:38 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int validate_tokens_for_parser(t_shell *shell)
+int	validate_tokens_for_parser(t_shell *shell)
 {
 	if (!validate_tokens(shell))
 		return (0);
 	return (1);
 }
 
-int check_consecutive_ops(char *curr_token, char *next_token)
+int	check_consecutive_ops(char *curr_token, char *next_token)
 {
 	if (next_token && is_operator(curr_token) && is_operator(next_token))
 	{
-		if ((ft_strcmp(curr_token, "<") == 0 && ft_strcmp(next_token, "<") == 0) ||
-			(ft_strcmp(curr_token, ">") == 0 && ft_strcmp(next_token, ">") == 0))
+		if ((ft_strcmp(curr_token, "<") == 0 && ft_strcmp(next_token, "<") == 0)
+			|| (ft_strcmp(curr_token, ">") == 0
+				&& ft_strcmp(next_token, ">") == 0))
 		{
 			return (1);
 		}

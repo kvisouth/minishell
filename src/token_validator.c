@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/11 15:37:34 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 19:16:34 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ int	handle_pipe(t_shell *shell, int token_count)
 }
 
 // Check if there are two consecutive operators
-int handle_operator(t_shell *shell, int token_count, int i)
+int	handle_operator(t_shell *shell, int token_count, int i)
 {
-	char *curr_token;
-	char *next_token;
-	
+	char	*curr_token;
+	char	*next_token;
+
 	curr_token = shell->lexer.tokens[i];
 	if (i < token_count - 1)
 		next_token = shell->lexer.tokens[i + 1];
 	else
 		next_token = NULL;
-	if (ft_strlen(curr_token) > 2 &&
-		(curr_token[0] == '>' || curr_token[0] == '<'))
+	if (ft_strlen(curr_token) > 2
+		&& (curr_token[0] == '>' || curr_token[0] == '<'))
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		ft_putstr_fd(curr_token, 2);
@@ -52,31 +52,35 @@ int handle_operator(t_shell *shell, int token_count, int i)
 }
 
 // Check if there is a redirection without a target
-int handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
+int	handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
 {
 	*skip = 0;
 	if (is_redirection(shell->lexer.tokens[i]))
 	{
 		if (i == token_count - 1 || is_operator(shell->lexer.tokens[i + 1]))
 		{
-			ft_putstr_fd("minishell: syntax error: missing redirect target\n", 2);
+			ft_putstr_fd("minishell: syntax error:\
+				 missing redirect target\n", 2);
 			return (0);
 		}
 		*skip = 1;
 	}
 	return (1);
 }
+
 // Check if there is an empty command between two pipes
 int	handle_empty_command_between_pipe(t_shell *shell, int token_count, int i)
 {
-	if (i > 0 && i < token_count - 1 && 
-		is_pipe(shell->lexer.tokens[i - 1]) && is_pipe(shell->lexer.tokens[i + 1]))
+	if (i > 0 && i < token_count - 1 && is_pipe(shell->lexer.tokens[i - 1])
+		&& is_pipe(shell->lexer.tokens[i + 1]))
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		ft_putstr_fd("minishell: syntax error \
+			near unexpected token `|'\n", 2);
 		return (0);
 	}
 	return (1);
 }
+
 // main function to validate tokens
 int	validate_tokens(t_shell *shell)
 {

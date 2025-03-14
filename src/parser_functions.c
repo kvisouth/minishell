@@ -3,53 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parser_functions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:21 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 16:38:09 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 18:01:45 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* Parse a redirection token (< , >  , << , >>) */
-t_redir		*parse_redirection(t_shell *shell)
+t_redir	*parse_redirection(t_shell *shell)
 {
-	t_redir *redir;
-	char *token;
-	char *target;
+	char	*token;
+	char	*target;
 
-	token = next_token(shell);
-	if (!token || !is_redirection(token))
+	if (!get_redirection_tokens(shell, &token, &target))
 		return (NULL);
-	target = next_token(shell);
-	if (!target)
-		return (NULL);
-	redir = (t_redir *)malloc(sizeof(t_redir));
-	if (!redir)
-		return (NULL);
-	if (ft_strcmp(token, "<") == 0)
-		redir->type = REDIR_IN;
-	else if (ft_strcmp(token, ">") == 0)
-		redir->type = REDIR_OUT;
-	else if (ft_strcmp(token, ">>") == 0)
-		redir->type = REDIR_APPEND;
-	else if (ft_strcmp(token, "<<") == 0)
-		redir->type = REDIR_HEREDOC;
-	else
-	{
-		free(redir);
-		return (NULL);
-	}
-	redir->file = ft_strdup(target);
-	if (!redir->file)
-	{
-		free(redir);
-		return (NULL);
-	}
-	redir->next = NULL;
-	return (redir);
+	return (create_redirection(token, target));
 }
+
 t_simple_cmds	*alloc_cmd_args(t_simple_cmds *cmd, int word_count)
 {
 	if (!cmd)
@@ -76,50 +49,31 @@ t_simple_cmds	*alloc_cmd_args(t_simple_cmds *cmd, int word_count)
 	}
 	return (cmd);
 }
-t_simple_cmds    *parse_simple_cmd(t_shell *shell)
-{
-	t_simple_cmds	*cmd;
-	int				word_count;
-	int				i;
-	char			*token;
 
-	word_count = count_words(shell);
-	cmd = create_simple_cmd();
-	cmd = alloc_cmd_args(cmd, word_count);
+t_simple_cmds	*parse_simple_cmd(t_shell *shell)
+{
+	t_simple_cmds		*cmd;
+	int					word_count;
+
+	cmd = prepare_simple_cmd(shell, &word_count);
 	if (!cmd)
 		return (NULL);
-	i = 0;
-	while((token = peek_token(shell)) && !is_pipe(token))
-	{
-		if (i >= word_count && !is_redirection(token))
-			break;
-		if (!process_token(shell, cmd, &i))
-		{
-			free_simple_cmd(cmd);
-			return (NULL);
-		}
-	}
-	if (word_count == 0)
-		cmd->str[i] = NULL;
-	if (i < word_count)
-		cmd->str[i] = NULL;
-	check_if_builtin(cmd);
-	return (cmd);
+	return (process_simple_cmd(shell, cmd, word_count));
 }
-
 
 t_simple_cmds	*parse_pipeline(t_shell *shell)
 {
 	t_simple_cmds	*current_cmd;
 	t_simple_cmds	*next_cmd;
-	t_simple_cmds 	*first_cmd;
+	t_simple_cmds	*first_cmd;
 	char			*token;
 
 	first_cmd = parse_simple_cmd(shell);
 	if (!first_cmd)
 		return (NULL);
 	current_cmd = first_cmd;
-	while((token = peek_token(shell)) && is_pipe(token))
+	token = peek_token(shell);
+	while ((peek_token(shell)) && is_pipe(token))
 	{
 		next_token(shell);
 		next_cmd = parse_simple_cmd(shell);

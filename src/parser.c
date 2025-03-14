@@ -6,36 +6,37 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/14 15:03:50 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 17:21:47 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void init_parser(t_parser *parser, t_lexer *lexer)
+void	init_parser(t_parser *parser, t_lexer *lexer)
 {
 	parser->tokens = lexer->tokens;
 	parser->token_count = lexer->token_count;
 	parser->token_index = 0;
 }
+
 /*this function will count the number of words in the command line */
-int count_words(t_shell *shell)
+int	count_words(t_shell *shell)
 {
-	int i;
-	int count;
-	
+	int	i;
+	int	count;
+
 	i = shell->parser.token_index;
 	count = 0;
 	while (i < shell->parser.token_count)
 	{
 		if (is_pipe(shell->parser.tokens[i]))
-			break;
-		if	(is_redirection(shell->parser.tokens[i]))
+			break ;
+		if (is_redirection(shell->parser.tokens[i]))
 		{
 			i++;
 			if (i < shell->parser.token_count)
 				i++;
-			continue;
+			continue ;
 		}
 		if (!is_operator(shell->parser.tokens[i]))
 			count++;
@@ -45,9 +46,9 @@ int count_words(t_shell *shell)
 }
 
 /*this function will allocate memory for the command and its arguments */
-t_simple_cmds *create_simple_cmd(void)
+t_simple_cmds	*create_simple_cmd(void)
 {
-	t_simple_cmds *cmd;
+	t_simple_cmds	*cmd;
 
 	cmd = (t_simple_cmds *)malloc(sizeof(t_simple_cmds));
 	if (!cmd)
@@ -60,11 +61,11 @@ t_simple_cmds *create_simple_cmd(void)
 	return (cmd);
 }
 
-void print_commands(t_simple_cmds *cmds)
+void	print_commands(t_simple_cmds *cmds)
 {
-	t_simple_cmds *current;
-	int i;
-	
+	t_simple_cmds	*current;
+	int				i;
+
 	current = cmds;
 	while (current)
 	{
@@ -80,7 +81,7 @@ void print_commands(t_simple_cmds *cmds)
 	}
 }
 
-int parser(t_shell *shell)
+int	parser(t_shell *shell)
 {
 	init_parser(&shell->parser, &shell->lexer);
 	shell->simple_cmds = parse_pipeline(shell);
