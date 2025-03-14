@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:42:41 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 19:09:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:14:21 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_simple_cmds	*process_simple_cmd(t_shell *shell,
 	char	*token;
 
 	i = 0;
-	token = next_token(shell);
+	token = peek_token(shell);
 	while ((token) && !is_pipe(token))
 	{
 		if (i >= word_count && !is_redirection(token))
@@ -92,6 +92,7 @@ t_simple_cmds	*process_simple_cmd(t_shell *shell,
 			free_simple_cmd(cmd);
 			return (NULL);
 		}
+		token = peek_token(shell);
 	}
 	if (word_count == 0)
 		cmd->str[i] = NULL;
