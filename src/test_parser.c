@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:57:39 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 16:26:01 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 16:38:49 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,11 +148,11 @@ void	test_parser(void)
     run_parser_test("cat < input1 < input2", test_num++);
 }
 
-/* Main function for parser test */
-int	main(void)
-{
-    printf("\n===== MINISHELL PARSER TEST =====\n\n");
-    test_parser();
-    printf("===== TEST COMPLETE =====\n\n");
-    return (0);
-}
+// /* Main function for parser test */
+// int	main(void)
+// {
+//     printf("\n===== MINISHELL PARSER TEST =====\n\n");
+//     test_parser();
+//     printf("===== TEST COMPLETE =====\n\n");
+//     return (0);
+// }
