@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 17:22:13 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:24:52 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
     t_redir                 *redirects;
+    t_exec                  *exec;
     bool                    builtin;
 }	t_simple_cmds;
 
