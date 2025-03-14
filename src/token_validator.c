@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 19:16:34 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:41:53 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	handle_operator(t_shell *shell, int token_count, int i)
 	char	*next_token;
 
 	curr_token = shell->lexer.tokens[i];
+	if (curr_token == NULL)
+		return (1);
 	if (i < token_count - 1)
 		next_token = shell->lexer.tokens[i + 1];
 	else
