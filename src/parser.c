@@ -6,13 +6,13 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/12 16:35:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/13 00:57:21 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void init_parser(t_parser *parser, t_lexer *lexer)
+void init_parser(t_parser *parser, t_lexer *lexer)
 {
 	parser->tokens = lexer->tokens;
 	parser->token_count = lexer->token_count;
