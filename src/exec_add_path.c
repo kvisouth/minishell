@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:57:34 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/13 16:58:00 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 15:59:41 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,5 +144,6 @@ int	add_path_to_cmd(t_shell *shell)
 	cmd = choose_path_in_dirs(dirs); // cmd = "/usr/bin/ls"
 	if (!cmd)
 		return (0);
+	shell->simple_cmds->str[0] = cmd;
 	return (1);
 }
