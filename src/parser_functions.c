@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:21 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 15:00:18 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 16:27:24 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_simple_cmds	*alloc_cmd_args(t_simple_cmds *cmd, int word_count)
 }
 t_simple_cmds    *parse_simple_cmd(t_shell *shell)
 {
-    t_simple_cmds	*cmd;
+	t_simple_cmds	*cmd;
 	int				word_count;
 	int				i;
 	char			*token;
@@ -91,6 +91,8 @@ t_simple_cmds    *parse_simple_cmd(t_shell *shell)
 	i = 0;
 	while((token = peek_token(shell)) && !is_pipe(token))
 	{
+		if (i >= word_count && !is_redirection(token))
+			break;
 		if (!process_token(shell, cmd, &i))
 		{
 			free_simple_cmd(cmd);
@@ -98,6 +100,8 @@ t_simple_cmds    *parse_simple_cmd(t_shell *shell)
 		}
 	}
 	if (word_count == 0)
+		cmd->str[i] = NULL;
+	if (i < word_count)
 		cmd->str[i] = NULL;
 	check_if_builtin(cmd);
 	return (cmd);
