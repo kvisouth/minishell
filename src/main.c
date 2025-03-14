@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/14 16:38:07 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 20:26:03 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ void	start_minishell(t_shell *shell)
 		free(shell->cmdline);
 		return ;
 	}
-	 if (!parser(shell))
-	 {
-	 	return ;
-	 }
-	// print_commands(shell->simple_cmds);
+	if (!parser(shell))
+	{
+		return ;
+	}
 	if (!exec(shell))
 	{
 		return ;
