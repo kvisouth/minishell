@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/14 17:21:47 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:22:32 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_simple_cmds	*create_simple_cmd(void)
 	cmd->next = NULL;
 	cmd->prev = NULL;
 	cmd->builtin = false;
+	cmd->pid = 1;
 	return (cmd);
 }
 
