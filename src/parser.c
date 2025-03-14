@@ -6,13 +6,13 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/12 16:35:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:03:50 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void init_parser(t_parser *parser, t_lexer *lexer)
+void init_parser(t_parser *parser, t_lexer *lexer)
 {
 	parser->tokens = lexer->tokens;
 	parser->token_count = lexer->token_count;
@@ -23,12 +23,21 @@ int count_words(t_shell *shell)
 {
 	int i;
 	int count;
-
-	i = 0;
+	
+	i = shell->parser.token_index;
 	count = 0;
-	while (i < shell->lexer.token_count)
+	while (i < shell->parser.token_count)
 	{
-		if (!is_operator(shell->lexer.tokens[i]))
+		if (is_pipe(shell->parser.tokens[i]))
+			break;
+		if	(is_redirection(shell->parser.tokens[i]))
+		{
+			i++;
+			if (i < shell->parser.token_count)
+				i++;
+			continue;
+		}
+		if (!is_operator(shell->parser.tokens[i]))
 			count++;
 		i++;
 	}

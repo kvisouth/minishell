@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:21 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 17:12:04 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:00:18 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_simple_cmds	*alloc_cmd_args(t_simple_cmds *cmd, int word_count)
 		return (NULL);
 	if (word_count == 0)
 	{
-		cmd->str = malloc(sizeof(char *));
+		cmd->str = malloc(sizeof(char *) * 1);
 		if (!cmd->str)
 		{
 			free(cmd);
@@ -66,12 +66,13 @@ t_simple_cmds	*alloc_cmd_args(t_simple_cmds *cmd, int word_count)
 	}
 	else
 	{
-		cmd->str = malloc(sizeof(char *) * word_count + 1);
+		cmd->str = malloc(sizeof(char *) * (word_count + 1));
 		if (!cmd->str)
 		{
 			free(cmd);
 			return (NULL);
 		}
+		cmd->str[word_count] = NULL;
 	}
 	return (cmd);
 }

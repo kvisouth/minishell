@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:18:59 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/12 17:07:13 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/13 01:12:39 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	process_token(t_shell *shell, t_simple_cmds *cmd, int *i)
 	if (is_redirection(token))
 	{
 		redir = parse_redirection(shell);
+		if (!redir)
+			return (0);
 		if (!add_redirection(cmd, redir))
 			return (0);
 	}
@@ -81,9 +83,11 @@ void	free_simple_cmd(t_simple_cmds *cmd)
             while (cmd->str[i])
             {
                 free(cmd->str[i]);
+				cmd->str[i] = NULL;
                 i++;
             }
             free(cmd->str);
+			cmd->str = NULL;
         }
         redir = cmd->redirects;
         while (redir)
