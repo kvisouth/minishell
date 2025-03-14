@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 14:24:52 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 14:53:42 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_simple_cmds
 	struct s_simple_cmds	*next;
 	struct s_simple_cmds	*prev;
     t_redir                 *redirects;
-    t_exec                  *exec;
+    pid_t                   pid;
     bool                    builtin;
 }	t_simple_cmds;
 

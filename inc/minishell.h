@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 17:20:44 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/14 14:54:07 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_shell
 	char	*cmdline;
 	char	*new_cmdline;
 	int		nb_cmds;
+	char	*path;
+	int		pipefd[2];
 	t_lexer	lexer;
 	t_simple_cmds	*simple_cmds;
     t_parser        parser;         // Parser state
