@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/14 14:54:07 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/17 15:58:37 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,14 @@
 # include <errno.h>
 # include <curses.h>
 # include <term.h>
+# include <stddef.h>
 # include "../libft/libft.h"
 # include "parser.h"
 # include "lexer.h"
 # include "exec.h"
+# include "expander.h"
+
+extern int g_sig; // Global variable to store the exit status
 
 typedef struct s_shell
 {

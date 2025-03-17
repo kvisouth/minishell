@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:21 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 18:01:45 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/17 16:13:39 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_simple_cmds	*parse_pipeline(t_shell *shell)
 		return (NULL);
 	current_cmd = first_cmd;
 	token = peek_token(shell);
-	while ((peek_token(shell)) && is_pipe(token))
+	while (token && is_pipe(token))
 	{
 		next_token(shell);
 		next_cmd = parse_simple_cmd(shell);
@@ -85,6 +85,7 @@ t_simple_cmds	*parse_pipeline(t_shell *shell)
 		current_cmd->next = next_cmd;
 		next_cmd->prev = current_cmd;
 		current_cmd = next_cmd;
+		token = peek_token(shell);
 	}
 	return (first_cmd);
 }

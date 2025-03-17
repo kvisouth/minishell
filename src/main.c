@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/14 20:26:03 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/17 15:58:21 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	g_sig;
+int	g_sig = 0;
 
 void	start_minishell(t_shell *shell)
 {
@@ -20,6 +20,13 @@ void	start_minishell(t_shell *shell)
 	if (!lexer(shell))
 	{
 		free(shell->cmdline);
+		return ;
+	}
+	if (!expand_tokens(shell))
+	{
+		free(shell->cmdline);
+		free_tab(shell->lexer.tokens);
+		free(shell->new_cmdline);
 		return ;
 	}
 	if (!parser(shell))

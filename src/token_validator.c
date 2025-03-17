@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/03/14 20:41:53 by kevso            ###   ########.fr       */
-=======
-/*   Updated: 2025/03/14 20:38:34 by abreuil          ###   ########.fr       */
->>>>>>> lamo
+/*   Updated: 2025/03/17 16:17:53 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +35,7 @@ int	handle_operator(t_shell *shell, int token_count, int i)
 	char	*next_token;
 
 	curr_token = shell->lexer.tokens[i];
-<<<<<<< HEAD
-	if (curr_token == NULL)
-=======
 	if (!curr_token)
->>>>>>> lamo
 		return (1);
 	if (i < token_count - 1)
 		next_token = shell->lexer.tokens[i + 1];
@@ -81,11 +73,10 @@ int	handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
 // Check if there is an empty command between two pipes
 int	handle_empty_command_between_pipe(t_shell *shell, int token_count, int i)
 {
-	if (i > 0 && i < token_count - 1 && is_pipe(shell->lexer.tokens[i - 1])
+	if (i > 0 && i < token_count - 1 && is_pipe(shell->lexer.tokens[i])
 		&& is_pipe(shell->lexer.tokens[i + 1]))
 	{
-		ft_putstr_fd("minishell: syntax error \
-			near unexpected token `|'\n", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		return (0);
 	}
 	return (1);
