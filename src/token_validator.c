@@ -6,7 +6,11 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/03/14 20:41:53 by kevso            ###   ########.fr       */
+=======
+/*   Updated: 2025/03/14 20:38:34 by abreuil          ###   ########.fr       */
+>>>>>>> lamo
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +39,11 @@ int	handle_operator(t_shell *shell, int token_count, int i)
 	char	*next_token;
 
 	curr_token = shell->lexer.tokens[i];
+<<<<<<< HEAD
 	if (curr_token == NULL)
+=======
+	if (!curr_token)
+>>>>>>> lamo
 		return (1);
 	if (i < token_count - 1)
 		next_token = shell->lexer.tokens[i + 1];

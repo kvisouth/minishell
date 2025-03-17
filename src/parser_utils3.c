@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:42:41 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 20:14:21 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:20:11 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,7 @@ t_simple_cmds	*process_simple_cmd(t_shell *shell,
 		}
 		token = peek_token(shell);
 	}
-	if (word_count == 0)
-		cmd->str[i] = NULL;
-	if (i < word_count)
-		cmd->str[i] = NULL;
+	cmd->str[i] = NULL;
 	check_if_builtin(cmd);
 	return (cmd);
 }
