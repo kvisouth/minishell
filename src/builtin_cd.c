@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/18 16:03:59 by kevso            ###   ########.fr       */
+/*   Created: 2025/03/18 15:39:40 by kevso             #+#    #+#             */
+/*   Updated: 2025/03/18 16:12:06 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#include "../inc/minishell.h"
 
-# include "../inc/minishell.h"
+// cd with only a relative or absolute path
+int	builtin_cd(t_shell *shell, t_simple_cmds *cmd)
+{
+	// char	cwd[1024];
+	char	oldpwd[1024];
 
-typedef struct s_shell t_shell;
-
-int	add_path_to_cmd(t_shell *shell);
-int	exec(t_shell *shell);
-// int	execute_command(t_shell *shell, t_simple_cmds *cmd);
-
-/* BUILT-IN */
-int	    builtin_echo(char **args);
-void	builtin_env(char **env);
-void	builtin_pwd(void);
-int     builtin_cd(t_shell *shell, t_simple_cmds *cmd);
-
-#endif
+	getcwd(oldpwd, sizeof(oldpwd));
+	(void)cmd;
+	(void)shell;
+	return (0);
+}
