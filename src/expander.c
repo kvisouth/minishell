@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:52:52 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/17 16:03:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 15:45:03 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	*expand_token(char *token)
 		free(exp.var_name);
 		if (!exp.var_value)
 		{
-			free(exp.var_name);
 			free(expanded);
 			return (NULL);
 		}

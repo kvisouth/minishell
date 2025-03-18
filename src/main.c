@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/17 15:58:21 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 16:08:36 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	start_minishell(t_shell *shell)
 	{
 		return ;
 	}
+	printf("simple_cmds->str[0]: %s\n", shell->simple_cmds->str[0]);
 	if (!exec(shell))
 	{
 		return ;

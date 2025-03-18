@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:47:40 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/17 15:58:53 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 16:02:22 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ char	*find_next_variable(char *str, t_expand *exp)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] && str[i + 1]
+		if (str[i] == '$' && str[i + 1]
 			&& (is_valid_var_char(str[i + 1], 1) || str[i + 1] == '?'))
 			{
+				if (!str[i + 1])
+					return (NULL);
 				exp->start_pos = i;
 				i++;
 				if (str[i] == '?')
@@ -78,14 +80,18 @@ int	should_expand_in_quotes(char *token, int pos, t_expand *exp)
 
 char	*expand_variable(char *var_name)
 {
-	char	*var_value;
-	extern int	g_sig;
+	char *var_value;
+	extern int g_sig;
 
+	// Handle $? first
+	if (ft_strcmp(var_name, "?") == 0)
+		return (ft_itoa(g_sig));
+		
+	// Then handle normal variables
 	var_value = getenv(var_name);
 	if (!var_value)
 		return (ft_strdup(""));
-	if (ft_strcmp(var_name, "?") == 0)
-		return (ft_itoa(g_sig));
+		
 	return (ft_strdup(var_value));
 }
 
