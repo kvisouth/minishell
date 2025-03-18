@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:47:40 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/18 16:02:22 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 17:20:58 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,23 @@ char	*find_next_variable(char *str, t_expand *exp)
 {
 	int		i;
 
-	i = 0;
+	i = exp->start_pos;
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1]
 			&& (is_valid_var_char(str[i + 1], 1) || str[i + 1] == '?'))
+		{
+			exp->start_pos = i;
+			i++;
+			if (str[i] == '?')
 			{
-				if (!str[i + 1])
-					return (NULL);
-				exp->start_pos = i;
-				i++;
-				if (str[i] == '?')
-				{
-					exp->end_pos = i + 1;
-					return (ft_strdup("?"));
-				}
-				exp->end_pos = i;
-				while (str[exp->end_pos] && is_valid_var_char(str[exp->end_pos], 0))
-					(exp->end_pos)++;
-				return (ft_substr(str, i, exp->end_pos - i));
+				exp->end_pos = i + 1;
+				return (ft_strdup("?"));
+			}
+			exp->end_pos = i;
+			while (str[exp->end_pos] && is_valid_var_char(str[exp->end_pos], 0))
+				(exp->end_pos)++;
+			return (ft_substr(str, i, exp->end_pos - i));
 			}
 		i++;
 	}
@@ -53,29 +51,27 @@ char	*find_next_variable(char *str, t_expand *exp)
 /* handle quotes while expanding variables */
 int	should_expand_in_quotes(char *token, int pos, t_expand *exp)
 {
-	int	i;
-
-	i = 0;
-	exp->in_quotes = 0;
-	while (i < pos)
-	{
-		if (token[i] == '\'')
-		{
-			if (exp->in_quotes == 0)
-				exp->in_quotes = 1;
-			else if (exp->in_quotes == 1)
-				exp->in_quotes = 0;
-		}
-		else if (token[i] == '\"')
-		{
-			if (exp->in_quotes == 0)
-				exp->in_quotes = 2;
-			else if (exp->in_quotes == 2)
-				exp->in_quotes = 0;
-		}
-		i++;
-	}
-	return (exp->in_quotes != 1);
+	int i;
+    int in_single_quotes = 0;
+    int in_double_quotes = 0;
+    
+    i = 0;
+    exp->in_quotes = 0;
+    while (i < pos)
+    {
+        if (token[i] == '\'' && !in_double_quotes)
+            in_single_quotes = !in_single_quotes;
+        else if (token[i] == '\"' && !in_single_quotes)
+            in_double_quotes = !in_double_quotes;
+        i++;
+    }
+    if (in_single_quotes)
+        exp->in_quotes = 1;
+    else if (in_double_quotes)
+        exp->in_quotes = 2;
+    else
+        exp->in_quotes = 0;
+    return !in_single_quotes;
 }
 
 char	*expand_variable(char *var_name)
@@ -83,11 +79,8 @@ char	*expand_variable(char *var_name)
 	char *var_value;
 	extern int g_sig;
 
-	// Handle $? first
 	if (ft_strcmp(var_name, "?") == 0)
 		return (ft_itoa(g_sig));
-		
-	// Then handle normal variables
 	var_value = getenv(var_name);
 	if (!var_value)
 		return (ft_strdup(""));

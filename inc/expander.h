@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:49:47 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/17 16:03:36 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 17:34:17 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,5 @@ int			is_valid_var_char(char c, int first_char);
 int			should_expand_in_quotes(char *token, int pos, t_expand *exp);
 char		*replace_variable(char *token, t_expand *exp);
 void		init_expand(t_expand *exp);
-
+char		*remove_quotes(char *str);
 #endif

@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:52:52 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/18 15:45:03 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 17:09:17 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	expand_tokens(t_shell *shell)
 {
 	int		i;
 	char	*expanded;
+	char	*unquoted;
 
 	i = 0;
 	while (i < shell->lexer.token_count)
@@ -34,12 +35,21 @@ int	expand_tokens(t_shell *shell)
 		expanded = expand_token(shell->lexer.tokens[i]);
 		if (!expanded)
 			return (0);
+		if (!is_redirection(shell->lexer.tokens[i]))
+		{
+			unquoted = remove_quotes(expanded);
+			free(expanded);
+			if (!expanded)
+				return (0);
+			expanded = unquoted;
+		}
 		free(shell->lexer.tokens[i]);
 		shell->lexer.tokens[i] = expanded;
 		i++;
 	}
 	return (1);
 }
+
 
 char	*expand_token(char *token)
 {
@@ -54,6 +64,7 @@ char	*expand_token(char *token)
 	{
 		if (!should_expand_in_quotes(expanded, exp.start_pos, &exp))
 		{
+			exp.start_pos = exp.end_pos;
 			free(exp.var_name);
 			continue ;
 		}
