@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/17 14:48:28 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/18 15:11:10 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,26 @@ int	cmd_have_no_path(char *cmd)
 	return (1);
 }
 
+void	count_cmds(t_shell *shell)
+{
+	t_simple_cmds	*tmp;
+	int				i;
+
+	i = 0;
+	tmp = shell->simple_cmds;
+	while (tmp)
+	{
+		i++;
+		tmp->index = i;
+		tmp = tmp->next;
+	}
+	shell->nb_cmds = i;
+}
 
 /* Returns the exit status */
 int	exec(t_shell *shell)
 {
+	count_cmds(shell);
 	while (shell->simple_cmds)
 	{
 		if (shell->simple_cmds->builtin == false)
