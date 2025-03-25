@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/18 17:34:25 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/25 15:56:58 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,3 +85,4 @@ int	main(int ac, char **av, char **envp)
 	minishell_loop(&shell);
 	return (0);
 }
+

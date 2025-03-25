@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/18 16:25:49 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/03/25 15:55:29 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 		builtin_pwd();
 	// else if (ft_strcmp(cmd->str[0], "export") == 0)
 	// 	builtin_export(shell, cmd);
-	// else if (ft_strcmp(cmd->str[0], "unset") == 0)
-	// 	builtin_unset(shell, cmd);
+	 else if (ft_strcmp(cmd->str[0], "unset") == 0)
+	 	builtin_unset(shell, cmd);
 	// else if (ft_strcmp(cmd->str[0], "exit") == 0)
 	// 	builtin_exit(shell, cmd);
 }
