@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 17:09:05 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/28 15:27:07 by kevso            ###   ########.fr       */
+/*   Updated: 2025/03/28 15:40:38 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,10 @@ int	builtin_export(t_shell *shell, t_simple_cmds *cmd)
 	// char	*new;
 
 	// new = NULL;
+	(void)shell;
 	if (!check_export_args(cmd))
 		return (ft_putstr_fd("incorrect format\n", 2), 1);
 	if (check_export_args(cmd) == 2)
-	{
-		print_env_sorted(shell->env);
 		return (0);
-	}
 	return (0);
 }
