@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:39:40 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/21 16:21:48 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/10 14:27:31 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,27 @@ void	update_pwd(t_shell *shell, char *cwd)
 	free(tmp);
 }
 
+int	count_cd_args(t_simple_cmds *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->str[i])
+		i++;
+	return (i);
+}
+
 int	builtin_cd(t_shell *shell, t_simple_cmds *cmd)
 {
 	char	cwd[1024];
 	char	oldpwd[1024];
 
 	getcwd(oldpwd, sizeof(oldpwd));
+	if (count_cd_args(cmd) > 2)
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
+	}
 	if (cmd->str[1] == NULL || cmd->str[2] != NULL)
 		return (1);
 	if (chdir(cmd->str[1]) == -1)

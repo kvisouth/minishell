@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/25 15:56:29 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/04/10 18:27:26 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@ void	builtin_env(char **env);
 void	builtin_pwd(void);
 int     builtin_cd(t_shell *shell, t_simple_cmds *cmd);
 int		builtin_unset(t_shell *shell, t_simple_cmds *cmd);
+int 	builtin_export(t_shell *shell, t_simple_cmds *cmd);
+
+char	**copy_envp(char **envp);
 
 #endif

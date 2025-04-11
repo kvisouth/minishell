@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/25 15:55:29 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:06:53 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	child_process(t_shell *shell, t_simple_cmds *cmd)
 	}
 	if (cmd->pid == 0)
 	{
-		for (int i = 0; cmd->str[i]; i++)
-			printf("cmd[%d]: %s\n", i, cmd->str[i]);
+		// for (int i = 0; cmd->str[i]; i++)
+		// 	printf("cmd[%d]: %s\n", i, cmd->str[i]);
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
 		{
 			perror("execve");
@@ -60,15 +60,15 @@ void	child_process(t_shell *shell, t_simple_cmds *cmd)
 void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 {
 	if (ft_strcmp(cmd->str[0], "env") == 0)
-			builtin_env(shell->env);
+		builtin_env(shell->env);
 	else if (ft_strcmp(cmd->str[0], "cd") == 0)
 		builtin_cd(shell, cmd);
 	else if (ft_strcmp(cmd->str[0], "echo") == 0)
 		builtin_echo(cmd->str);
 	else if (ft_strcmp(cmd->str[0], "pwd") == 0)
 		builtin_pwd();
-	// else if (ft_strcmp(cmd->str[0], "export") == 0)
-	// 	builtin_export(shell, cmd);
+	else if (ft_strcmp(cmd->str[0], "export") == 0)
+		builtin_export(shell, cmd);
 	 else if (ft_strcmp(cmd->str[0], "unset") == 0)
 	 	builtin_unset(shell, cmd);
 	// else if (ft_strcmp(cmd->str[0], "exit") == 0)
