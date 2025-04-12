@@ -6,7 +6,7 @@
 /*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/12 10:29:54 by nok              ###   ########.fr       */
+/*   Updated: 2025/04/12 16:43:09 by nok              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,15 @@ void	format_cmds(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
-		if (cmd_have_no_path(cmd->str[0]))
+		if (cmd->builtin == false)
 		{
-			if (!add_path_to_cmd(shell, cmd))
+			if (cmd_have_no_path(cmd->str[0]))
 			{
-				perror("add_path_to_cmd");
-				return ;
+				if (!add_path_to_cmd(shell, cmd))
+				{
+					perror("add_path_to_cmd");
+					return ;
+				}
 			}
 		}
 		cmd = cmd->next;
@@ -87,8 +90,6 @@ void	child_process(t_shell *shell, t_simple_cmds *cmd)
 	}
 	if (cmd->pid == 0)
 	{
-		// for (int i = 0; cmd->str[i]; i++)
-		// 	printf("cmd[%d]: %s\n", i, cmd->str[i]);
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
 		{
 			perror("execve");
@@ -158,7 +159,9 @@ void	execute_pipeline(t_shell *shell)
     }
 
     // Attendez tous les processus enfants
-    while (wait(NULL) > 0);
+    // while (wait(NULL) > 0);	pid_t	pid;
+	while ((pid = waitpid(-1, NULL, 0)) > 0)
+		;
 }
 
 /* Executes the command */
@@ -187,25 +190,3 @@ int	exec(t_shell *shell)
 	wait(NULL);
 	return (0);
 }
-
-/* Returns the exit status */
-// int	exec(t_shell *shell)
-// {
-// 	count_cmds(shell);
-// 	while (shell->simple_cmds)
-// 	{
-// 		if (shell->simple_cmds->builtin == false)
-// 		{
-// 			if (cmd_have_no_path(shell->simple_cmds->str[0]))
-// 			{
-// 				if (!add_path_to_cmd(shell))
-// 					return (0);
-// 			}
-// 		}
-// 		execute_command(shell, shell->simple_cmds);
-// 		shell->simple_cmds = shell->simple_cmds->next;
-// 	}
-// 	wait(NULL);
-// 	return (0);
-// }
-
