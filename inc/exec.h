@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/10 18:27:26 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/12 10:20:28 by nok              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef struct s_shell t_shell;
 
-int	add_path_to_cmd(t_shell *shell);
+int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd);
 int	exec(t_shell *shell);
 // int	execute_command(t_shell *shell, t_simple_cmds *cmd);
 
