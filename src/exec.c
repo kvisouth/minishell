@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/12 20:17:33 by nok              ###   ########.fr       */
+/*   Updated: 2025/04/15 13:29:15 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	format_cmds(t_shell *shell)
 
 void	child_process(t_shell *shell, t_simple_cmds *cmd)
 {
+	int	status;
+
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 	{
@@ -90,13 +92,11 @@ void	child_process(t_shell *shell, t_simple_cmds *cmd)
 		}
 	}
 	else
-	{
-		int status;
 		waitpid(cmd->pid, &status, 0);
-	}
 }
 
-void	handle_child_process(t_shell *shell, t_simple_cmds *cmd, int prev_fd, int pipefd[2])
+void	handle_child_process(t_shell *shell,
+		t_simple_cmds *cmd, int prev_fd, int pipefd[2])
 {
 	if (prev_fd != -1)
 	{
@@ -109,11 +109,8 @@ void	handle_child_process(t_shell *shell, t_simple_cmds *cmd, int prev_fd, int p
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
-
 	if (cmd->builtin)
-	{
 		exec_builtin(shell, cmd);
-	}
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
@@ -128,22 +125,13 @@ void	handle_child_process(t_shell *shell, t_simple_cmds *cmd, int prev_fd, int p
 void	handle_parent_process(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
 {
 	if (*prev_fd != -1)
-	{
 		close(*prev_fd);
-	}
 	if (cmd->next)
-	{
 		close(pipefd[1]);
-	}
-
 	if (cmd->next)
-	{
 		*prev_fd = pipefd[0];
-	}
 	else
-	{
 		*prev_fd = -1;
-	}
 }
 
 void	create_pipe_if_needed(t_simple_cmds *cmd, int pipefd[2])
@@ -160,34 +148,26 @@ void	create_pipe_if_needed(t_simple_cmds *cmd, int pipefd[2])
 
 void	execute_pipeline(t_shell *shell)
 {
-	int pipefd[2];
-	int prev_fd;
-	t_simple_cmds *cmd;
+	int				pipefd[2];
+	int				prev_fd;
+	t_simple_cmds	*cmd;
 
 	prev_fd = -1;
 	cmd = shell->simple_cmds;
-
 	while (cmd)
 	{
 		create_pipe_if_needed(cmd, pipefd);
-
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 		{
 			perror("fork");
 			exit(1);
 		}
-
 		if (cmd->pid == 0)
-		{
 			handle_child_process(shell, cmd, prev_fd, pipefd);
-		}
-
 		handle_parent_process(&prev_fd, pipefd, cmd);
-
 		cmd = cmd->next;
 	}
-
 	while (waitpid(-1, NULL, 0) > 0)
 		;
 }
@@ -203,8 +183,9 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 
 int	exec(t_shell *shell)
 {
-	int saved_stdout = dup(STDOUT_FILENO);
+	int	restore_stdout;
 
+	restore_stdout = dup(STDOUT_FILENO);
 	count_cmds(shell);
 	format_cmds(shell);
 	if (shell->nb_cmds > 1)
@@ -216,9 +197,7 @@ int	exec(t_shell *shell)
 		else
 			execute_command(shell, shell->simple_cmds);
 	}
-
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdout);
-
+	dup2(restore_stdout, STDOUT_FILENO);
+	close(restore_stdout);
 	return (0);
 }
