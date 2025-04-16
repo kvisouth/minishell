@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/16 14:14:52 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/16 15:47:03 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,55 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
+void	handle_redirections(t_simple_cmds *cmd)
+{
+	t_redir	*redir;
+	int		fd;
+
+	redir = cmd->redirects;
+	while (redir)
+	{
+		if (redir->type == REDIR_OUT)
+		{
+			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1)
+			{
+				perror("open");
+				exit(1);
+			}
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
+		else if (redir->type == REDIR_IN)
+		{
+			fd = open(redir->file, O_RDONLY);
+			if (fd == -1)
+			{
+				perror("open");
+				exit(1);
+			}
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
+		redir = redir->next;
+	}
+}
+
+void	exec_builtin_with_redirections(t_shell *shell, t_simple_cmds *cmd)
+{
+	int	restore_stdin;
+	int	restore_stdout;
+
+	restore_stdin = dup(STDIN_FILENO);
+	restore_stdout = dup(STDOUT_FILENO);
+	handle_redirections(cmd);
+	exec_builtin(shell, cmd);
+	dup2(restore_stdin, STDIN_FILENO);
+	dup2(restore_stdout, STDOUT_FILENO);
+	close(restore_stdin);
+	close(restore_stdout);
+}
+
 void	child_process(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	status;
@@ -109,8 +158,12 @@ void	handle_child_process(t_shell *shell,
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
+	handle_redirections(cmd);
 	if (cmd->builtin)
+	{
 		exec_builtin(shell, cmd);
+		exit(0);
+	}
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
@@ -223,7 +276,7 @@ int	exec(t_shell *shell)
 	else
 	{
 		if (shell->simple_cmds->builtin)
-			exec_builtin(shell, shell->simple_cmds);
+			exec_builtin_with_redirections(shell, shell->simple_cmds);
 		else
 			execute_command(shell, shell->simple_cmds);
 	}
@@ -231,3 +284,7 @@ int	exec(t_shell *shell)
 	close(restore_stdout);
 	return (0);
 }
+
+//TODO : gerer les codes d'erreurs
+//TODO : faire exit
+//TODO : gerer les redirections >> et <<
