@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/15 13:29:15 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/16 14:14:52 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	handle_child_process(t_shell *shell,
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
-	if (cmd->next)
+	if (pipefd != NULL && cmd->next)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -146,6 +146,45 @@ void	create_pipe_if_needed(t_simple_cmds *cmd, int pipefd[2])
 	}
 }
 
+int	execute_command(t_shell *shell, t_simple_cmds *cmd)
+{
+	int	pipefd[2];
+	int	prev_fd;
+
+	prev_fd = -1;
+	if (cmd->next)
+	{
+		if (pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			exit(1);
+		}
+	}
+	cmd->pid = fork();
+	if (cmd->pid == -1)
+	{
+		perror("fork");
+		exit(1);
+	}
+	if (cmd->pid == 0)
+	{
+		if (cmd->next)
+			handle_child_process(shell, cmd, prev_fd, pipefd);
+		else
+			handle_child_process(shell, cmd, prev_fd, NULL);
+	}
+	if (cmd->next)
+	{
+		close(pipefd[1]);
+		prev_fd = pipefd[0];
+	}
+	else
+		prev_fd = -1;
+	while (waitpid(cmd->pid, NULL, 0) > 0)
+		;
+	return (0);
+}
+
 void	execute_pipeline(t_shell *shell)
 {
 	int				pipefd[2];
@@ -170,15 +209,6 @@ void	execute_pipeline(t_shell *shell)
 	}
 	while (waitpid(-1, NULL, 0) > 0)
 		;
-}
-
-int	execute_command(t_shell *shell, t_simple_cmds *cmd)
-{
-	if (!shell->simple_cmds->builtin)
-		child_process(shell, cmd);
-	else
-		exec_builtin(shell, cmd);
-	return (0);
 }
 
 int	exec(t_shell *shell)
