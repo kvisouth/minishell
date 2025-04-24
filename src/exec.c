@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/17 14:38:11 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/04/24 17:28:02 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,22 +92,34 @@ void	handle_redirections(t_simple_cmds *cmd)
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
-		else if (redir->type == REDIR_IN)
+		else if (redir->type == REDIR_APPEND)
 		{
-			fd = open(redir->file, O_RDONLY);
+			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd == -1)
 			{
 				perror("open");
 				exit(1);
 			}
-			dup2(fd, STDIN_FILENO);
+			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
+				
+		// else if (redir->type == REDIR_IN)
+		// {
+		// 	fd = open(redir->file, O_RDONLY);
+		// 	if (fd == -1)
+		// 	{
+		// 		perror("open");
+		// 		exit(1);
+		// 	}
+		// 	dup2(fd, STDIN_FILENO);
+		// 	close(fd);
+		// }
 		redir = redir->next;
 	}
 }
 
-void	exec_builtin_with_redirections(t_shell *shell, t_simple_cmds *cmd)
+void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	restore_stdin;
 	int	restore_stdout;
@@ -276,7 +288,7 @@ int	exec(t_shell *shell)
 	else
 	{
 		if (shell->simple_cmds->builtin)
-			exec_builtin_with_redirections(shell, shell->simple_cmds);
+			execute_builtin(shell, shell->simple_cmds);
 		else
 			execute_command(shell, shell->simple_cmds);
 	}
@@ -287,4 +299,4 @@ int	exec(t_shell *shell)
 
 //TODO : gerer les codes d'erreurs
 //TODO : faire exit
-//TODO : gerer les redirections >> et <<
+//TODO : gerer les redirections < et <<
