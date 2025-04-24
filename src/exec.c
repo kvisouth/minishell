@@ -6,11 +6,27 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/24 17:28:02 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:18:33 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	end(int code, bool kill, char *msg)
+{
+	g_sig = code;
+	if (kill == TRUE)
+	{
+		if (msg)
+			ft_putstr_fd(msg, STDERR_FILENO);
+		exit(code);
+	}
+	else
+	{
+		if (msg)
+			ft_putstr_fd(msg, STDERR_FILENO);
+	}
+}
 
 void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 {
@@ -63,10 +79,7 @@ void	format_cmds(t_shell *shell)
 			if (cmd_have_no_path(cmd->str[0]))
 			{
 				if (!add_path_to_cmd(shell, cmd))
-				{
-					perror("add_path_to_cmd");
 					return ;
-				}
 			}
 		}
 		cmd = cmd->next;
@@ -85,10 +98,7 @@ void	handle_redirections(t_simple_cmds *cmd)
 		{
 			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd == -1)
-			{
-				perror("open");
 				exit(1);
-			}
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
@@ -96,25 +106,10 @@ void	handle_redirections(t_simple_cmds *cmd)
 		{
 			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd == -1)
-			{
-				perror("open");
 				exit(1);
-			}
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
-		}
-				
-		// else if (redir->type == REDIR_IN)
-		// {
-		// 	fd = open(redir->file, O_RDONLY);
-		// 	if (fd == -1)
-		// 	{
-		// 		perror("open");
-		// 		exit(1);
-		// 	}
-		// 	dup2(fd, STDIN_FILENO);
-		// 	close(fd);
-		// }
+		}				
 		redir = redir->next;
 	}
 }
@@ -140,17 +135,11 @@ void	child_process(t_shell *shell, t_simple_cmds *cmd)
 
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-	{
-		perror("fork");
 		exit(1);
-	}
 	if (cmd->pid == 0)
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-		{
-			perror("execve");
 			exit(127);
-		}
 	}
 	else
 		waitpid(cmd->pid, &status, 0);
@@ -179,10 +168,7 @@ void	handle_child_process(t_shell *shell,
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-		{
-			perror("execve");
 			exit(1);
-		}
 	}
 	exit(0);
 }
@@ -199,18 +185,6 @@ void	handle_parent_process(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
 		*prev_fd = -1;
 }
 
-void	create_pipe_if_needed(t_simple_cmds *cmd, int pipefd[2])
-{
-	if (cmd->next)
-	{
-		if (pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			exit(1);
-		}
-	}
-}
-
 int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	pipefd[2];
@@ -220,17 +194,11 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	if (cmd->next)
 	{
 		if (pipe(pipefd) == -1)
-		{
-			perror("pipe");
 			exit(1);
-		}
 	}
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-	{
-		perror("fork");
 		exit(1);
-	}
 	if (cmd->pid == 0)
 	{
 		if (cmd->next)
@@ -260,13 +228,14 @@ void	execute_pipeline(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
-		create_pipe_if_needed(cmd, pipefd);
+		if (cmd->next)
+		{
+			if (pipe(pipefd) == -1)
+				exit(1);
+		}
 		cmd->pid = fork();
 		if (cmd->pid == -1)
-		{
-			perror("fork");
 			exit(1);
-		}
 		if (cmd->pid == 0)
 			handle_child_process(shell, cmd, prev_fd, pipefd);
 		handle_parent_process(&prev_fd, pipefd, cmd);
