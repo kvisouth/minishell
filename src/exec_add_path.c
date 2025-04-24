@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_add_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:57:34 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/12 10:19:48 by nok              ###   ########.fr       */
+/*   Updated: 2025/04/24 17:33:35 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,40 +125,27 @@ char	*choose_path_in_dirs(char **dirs)
 /* From "ls" to "/usr/bin/ls" */
 int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd)
 {
-    char	*cmd_path;
-    char	**dirs;
+	char	*cmd_path;
+	char	**dirs;
 
-    // Récupère la variable PATH de l'environnement
-    shell->path = get_path(shell);
-    if (!shell->path)
-        return (0);
-
-    // Récupère la commande actuelle (ex: "ls")
-    cmd_path = cmd->str[0];
-    if (!cmd_path)
-        return (0);
-
-    // Découpe PATH en répertoires (ex: ["/usr/bin", "/bin", ...])
-    dirs = ft_split(shell->path, ':');
-    if (!dirs)
-        return (0);
-
-    // Ajoute un slash à chaque répertoire (ex: ["/usr/bin/", "/bin/", ...])
-    dirs = concat_slash_to_dirs(dirs);
-    if (!dirs)
-        return (0);
-
-    // Ajoute la commande à chaque répertoire (ex: ["/usr/bin/ls", "/bin/ls", ...])
-    dirs = concat_cmd_to_dirs(cmd_path, dirs);
-    if (!dirs)
-        return (0);
-
-    // Choisit le chemin valide pour la commande (ex: "/usr/bin/ls")
-    cmd_path = choose_path_in_dirs(dirs);
-    if (!cmd_path)
-        return (0);
-
-    // Met à jour cmd->str[0] avec le chemin complet
-    cmd->str[0] = cmd_path;
-    return (1);
+	shell->path = get_path(shell);
+	if (!shell->path)
+		return (0);
+	cmd_path = cmd->str[0];
+	if (!cmd_path)
+		return (0);
+	dirs = ft_split(shell->path, ':');
+	if (!dirs)
+		return (0);
+	dirs = concat_slash_to_dirs(dirs);
+	if (!dirs)
+		return (0);
+	dirs = concat_cmd_to_dirs(cmd_path, dirs);
+	if (!dirs)
+		return (0);
+	cmd_path = choose_path_in_dirs(dirs);
+	if (!cmd_path)
+		return (0);
+	cmd->str[0] = cmd_path;
+	return (1);
 }
