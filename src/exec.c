@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/24 18:18:33 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:59:17 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,30 +86,59 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
+void	handle_redit_out(t_simple_cmds *cmd)
+{
+	int	fd;
+
+	fd = open(cmd->redirects->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	handle_redir_in(t_simple_cmds *cmd)
+{
+	int	fd;
+
+	fd = open(cmd->redirects->file, O_RDONLY);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+}
+
+void	handle_redir_append(t_simple_cmds *cmd)
+{
+	int	fd;
+
+	fd = open(cmd->redirects->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	handle_redit_heredoc(t_simple_cmds *cmd)
+{
+	(void)cmd;
+}
+
 void	handle_redirections(t_simple_cmds *cmd)
 {
 	t_redir	*redir;
-	int		fd;
 
 	redir = cmd->redirects;
 	while (redir)
 	{
 		if (redir->type == REDIR_OUT)
-		{
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-				exit(1);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
+			handle_redit_out(cmd);
+		else if (redir->type == REDIR_IN)
+			handle_redir_in(cmd);
 		else if (redir->type == REDIR_APPEND)
-		{
-			fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd == -1)
-				exit(1);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}				
+			handle_redir_append(cmd);
+		else if (redir->type == REDIR_HEREDOC)
+			handle_redit_heredoc(cmd);
 		redir = redir->next;
 	}
 }
