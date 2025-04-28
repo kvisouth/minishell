@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/28 13:59:17 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/29 01:51:28 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	count_cmds(t_shell *shell)
 	shell->nb_cmds = i;
 }
 
+/* Append the path to every non-builtin command */
 void	format_cmds(t_shell *shell)
 {
 	t_simple_cmds	*cmd;
@@ -86,6 +87,7 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
+/* Handle ">", 'O_WRONLY' flag is used to write to the file (stdout) */
 void	handle_redit_out(t_simple_cmds *cmd)
 {
 	int	fd;
@@ -97,6 +99,7 @@ void	handle_redit_out(t_simple_cmds *cmd)
 	close(fd);
 }
 
+/* Handle "<", 'O_RDONLY' flag is used to read from the file (stdin) */
 void	handle_redir_in(t_simple_cmds *cmd)
 {
 	int	fd;
@@ -108,6 +111,7 @@ void	handle_redir_in(t_simple_cmds *cmd)
 	close(fd);
 }
 
+/* Handle ">>", 'O_APPEND' flag is used to append to the file (stdout) */
 void	handle_redir_append(t_simple_cmds *cmd)
 {
 	int	fd;
@@ -119,8 +123,18 @@ void	handle_redir_append(t_simple_cmds *cmd)
 	close(fd);
 }
 
-void	handle_redit_heredoc(t_simple_cmds *cmd)
+void	handle_redir_heredoc(t_simple_cmds *cmd)
 {
+	pid_t	heredoc_pid;
+
+	heredoc_pid = fork();
+	if (heredoc_pid == -1)
+		end(1, TRUE, "fork failed");
+	if (heredoc_pid == 0)
+	{
+		// TODO: Implement heredoc handling
+	}
+	waitpid(heredoc_pid, NULL, 0);
 	(void)cmd;
 }
 
@@ -138,7 +152,7 @@ void	handle_redirections(t_simple_cmds *cmd)
 		else if (redir->type == REDIR_APPEND)
 			handle_redir_append(cmd);
 		else if (redir->type == REDIR_HEREDOC)
-			handle_redit_heredoc(cmd);
+			handle_redir_heredoc(cmd);
 		redir = redir->next;
 	}
 }
