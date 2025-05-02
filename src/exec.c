@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/29 01:51:28 by kevso            ###   ########.fr       */
+/*   Updated: 2025/04/30 16:33:20 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,19 +123,45 @@ void	handle_redir_append(t_simple_cmds *cmd)
 	close(fd);
 }
 
+void	child_process_heredoc(t_simple_cmds *cmd)
+{
+	int		fd;
+	char	*line;
+
+	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		exit(1);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, cmd->redirects->file) == 0)
+			break ;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	close(fd);
+	free(line);
+	exit(0);
+}
+
 void	handle_redir_heredoc(t_simple_cmds *cmd)
 {
 	pid_t	heredoc_pid;
+	int		fd;
 
 	heredoc_pid = fork();
 	if (heredoc_pid == -1)
 		end(1, TRUE, "fork failed");
 	if (heredoc_pid == 0)
-	{
-		// TODO: Implement heredoc handling
-	}
+		child_process_heredoc(cmd);
 	waitpid(heredoc_pid, NULL, 0);
-	(void)cmd;
+	fd = open(".heredoc", O_RDONLY);
+	if (fd == -1)
+		end(1, TRUE, "open failed");
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	unlink(".heredoc");
 }
 
 void	handle_redirections(t_simple_cmds *cmd)
