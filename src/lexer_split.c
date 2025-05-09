@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:53:04 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/09 16:01:58 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/09 16:03:37 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,40 @@ void	update_quote_status(t_lexer *lex, char c)
 }
 
 /* Just like a count_words, but ignores the spaces inside quotes */
-int	count_tokens(char *str, t_lexer *lex)
+int	count_tokens_core(char *str, t_lexer *lex)
 {
 	int		i;
 	int		count;
+	bool	in_token;
 
 	i = 0;
 	count = 0;
-	lex->quote_char = '\0';
-	lex->inside_quotes = false;
+	in_token = false;
 	while (str[i])
 	{
 		update_quote_status(lex, str[i]);
 		if (!lex->inside_quotes && str[i] == ' ')
-			count++;
+		{
+			if (in_token)
+			{
+				count++;
+				in_token = false;
+			}
+		}
+		else
+			in_token = true;
 		i++;
 	}
-	return (count + 1);
+	if (in_token)
+		count++;
+	return (count);
+}
+
+int	count_tokens(char *str, t_lexer *lex)
+{
+	lex->quote_char = '\0';
+	lex->inside_quotes = false;
+	return (count_tokens_core(str, lex));
 }
 
 /* Splits the cmdline into tokens from every spaces exept those inside quotes */
