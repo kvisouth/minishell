@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/30 16:33:20 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/09 16:19:17 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,16 @@ void	end(int code, bool kill, char *msg)
 	{
 		if (msg)
 			ft_putstr_fd(msg, STDERR_FILENO);
+		else
+			perror("Error");
 		exit(code);
 	}
 	else
 	{
 		if (msg)
 			ft_putstr_fd(msg, STDERR_FILENO);
+		else
+			perror("Error");
 	}
 }
 
@@ -75,6 +79,8 @@ void	format_cmds(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
+		if (cmd->str[0] == NULL)
+			continue;
 		if (cmd->builtin == false)
 		{
 			if (cmd_have_no_path(cmd->str[0]))
@@ -173,12 +179,12 @@ void	handle_redirections(t_simple_cmds *cmd)
 	{
 		if (redir->type == REDIR_OUT)
 			handle_redit_out(cmd);
+		else if (redir->type == REDIR_HEREDOC)
+			handle_redir_heredoc(cmd);
 		else if (redir->type == REDIR_IN)
 			handle_redir_in(cmd);
 		else if (redir->type == REDIR_APPEND)
 			handle_redir_append(cmd);
-		else if (redir->type == REDIR_HEREDOC)
-			handle_redir_heredoc(cmd);
 		redir = redir->next;
 	}
 }
@@ -196,22 +202,6 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdin);
 	close(restore_stdout);
-}
-
-void	child_process(t_shell *shell, t_simple_cmds *cmd)
-{
-	int	status;
-
-	cmd->pid = fork();
-	if (cmd->pid == -1)
-		exit(1);
-	if (cmd->pid == 0)
-	{
-		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-			exit(127);
-	}
-	else
-		waitpid(cmd->pid, &status, 0);
 }
 
 void	handle_child_process(t_shell *shell,
@@ -237,7 +227,7 @@ void	handle_child_process(t_shell *shell,
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-			exit(1);
+			end(1, TRUE, NULL);
 	}
 	exit(0);
 }
@@ -263,18 +253,13 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	if (cmd->next)
 	{
 		if (pipe(pipefd) == -1)
-			exit(1);
+		exit(1);
 	}
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		exit(1);
+	exit(1);
 	if (cmd->pid == 0)
-	{
-		if (cmd->next)
-			handle_child_process(shell, cmd, prev_fd, pipefd);
-		else
 			handle_child_process(shell, cmd, prev_fd, NULL);
-	}
 	if (cmd->next)
 	{
 		close(pipefd[1]);
@@ -317,6 +302,8 @@ void	execute_pipeline(t_shell *shell)
 int	exec(t_shell *shell)
 {
 	int	restore_stdout;
+
+	printf("welcome to exec\n");
 
 	restore_stdout = dup(STDOUT_FILENO);
 	count_cmds(shell);
