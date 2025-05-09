@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/12 10:20:28 by nok              ###   ########.fr       */
+/*   Updated: 2025/05/09 16:51:40 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	builtin_pwd(void);
 int     builtin_cd(t_shell *shell, t_simple_cmds *cmd);
 int		builtin_unset(t_shell *shell, t_simple_cmds *cmd);
 int 	builtin_export(t_shell *shell, t_simple_cmds *cmd);
-
+void	builtin_exit(char **args);
 char	**copy_envp(char **envp);
 
 #endif

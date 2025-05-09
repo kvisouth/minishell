@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 16:19:17 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/09 17:49:20 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 		builtin_export(shell, cmd);
 	else if (ft_strcmp(cmd->str[0], "unset") == 0)
 		builtin_unset(shell, cmd);
+	else if (ft_strcmp(cmd->str[0], "exit") == 0)
+		builtin_exit(cmd->str);
 }
 
 int	cmd_have_no_path(char *cmd)
@@ -302,8 +304,6 @@ void	execute_pipeline(t_shell *shell)
 int	exec(t_shell *shell)
 {
 	int	restore_stdout;
-
-	printf("welcome to exec\n");
 
 	restore_stdout = dup(STDOUT_FILENO);
 	count_cmds(shell);
