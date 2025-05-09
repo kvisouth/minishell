@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:39:40 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/10 14:27:31 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/09 19:24:03 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	builtin_cd(t_shell *shell, t_simple_cmds *cmd)
 	if (count_cd_args(cmd) > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
+		g_sig = 1;
 		return (1);
 	}
 	if (cmd->str[1] == NULL || cmd->str[2] != NULL)
@@ -76,7 +77,8 @@ int	builtin_cd(t_shell *shell, t_simple_cmds *cmd)
 	if (chdir(cmd->str[1]) == -1)
 	{
 		perror("cd");
-		return (1);
+		g_sig = 1;
+		return (0);
 	}
 	else
 	{
