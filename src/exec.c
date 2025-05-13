@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/13 16:02:32 by nok              ###   ########.fr       */
+/*   Updated: 2025/05/13 18:40:36 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ void	format_cmds(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
-		if (!cmd->str[0])
-		{
-			cmd = cmd->next;
-			continue ;
-		}
+		// if (!cmd->str[0])
+		// {
+		// 	cmd = cmd->next;
+		// 	continue ;
+		// }
 		if (cmd->builtin == false)
 		{
 			if (cmd_have_no_path(cmd->str[0]))
@@ -177,21 +177,42 @@ void	handle_redir_heredoc(t_simple_cmds *cmd)
 
 void	handle_redirections(t_simple_cmds *cmd)
 {
-	t_redir	*redir;
+    t_redir	*redir;
+    int		fd;
 
-	redir = cmd->redirects;
-	while (redir)
-	{
-		if (redir->type == REDIR_OUT)
-			handle_redit_out(cmd);
-		else if (redir->type == REDIR_HEREDOC)
-			handle_redir_heredoc(cmd);
-		else if (redir->type == REDIR_IN)
-			handle_redir_in(cmd);
-		else if (redir->type == REDIR_APPEND)
-			handle_redir_append(cmd);
-		redir = redir->next;
-	}
+    redir = cmd->redirects;
+    while (redir)
+    {
+        if (redir->type == REDIR_OUT)
+        {
+            fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd == -1)
+                exit(1);
+            dup2(fd, STDOUT_FILENO);
+            close(fd);
+        }
+        else if (redir->type == REDIR_APPEND)
+        {
+            fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (fd == -1)
+                exit(1);
+            dup2(fd, STDOUT_FILENO);
+            close(fd);
+        }
+        else if (redir->type == REDIR_IN)
+        {
+            fd = open(redir->file, O_RDONLY);
+            if (fd == -1)
+                exit(1);
+            dup2(fd, STDIN_FILENO);
+            close(fd);
+        }
+        else if (redir->type == REDIR_HEREDOC)
+        {
+            handle_redir_heredoc(cmd); // This one is fine as is
+        }
+        redir = redir->next;
+    }
 }
 
 void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
