@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 17:49:20 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/13 16:02:32 by nok              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,11 @@ void	format_cmds(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
-		if (cmd->str[0] == NULL)
-			continue;
+		if (!cmd->str[0])
+		{
+			cmd = cmd->next;
+			continue ;
+		}
 		if (cmd->builtin == false)
 		{
 			if (cmd_have_no_path(cmd->str[0]))
@@ -325,3 +328,5 @@ int	exec(t_shell *shell)
 //TODO : gerer les codes d'erreurs
 //TODO : faire exit
 //TODO : gerer les redirections < et <<
+
+// TODO : Le parent doit ignorer les signaux des lors qu'un enfant est en cours d'execution
