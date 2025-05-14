@@ -6,13 +6,13 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/14 15:56:49 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/14 20:39:23 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	end(int code, bool kill, char *msg)
+void	 end(int code, bool kill, char *msg)
 {
 	g_sig = code;
 	if (kill == TRUE)
@@ -229,7 +229,7 @@ void	handle_child_process(t_shell *shell,
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-			end(1, TRUE, NULL);
+			end(1, TRUE, "Error: command not found");
 	}
 	exit(0);
 }
@@ -322,8 +322,6 @@ int	exec(t_shell *shell)
 	return (0);
 }
 
-//TODO : gerer les codes d'erreurs
-//TODO : faire exit
-//TODO : gerer les redirections < et <<
-
 // TODO : Le parent doit ignorer les signaux des lors qu'un enfant est en cours d'execution
+// TODO : Finir heredoc
+// TODO : regler le probleme de commande vide (bad adress)
