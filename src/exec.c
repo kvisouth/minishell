@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/13 18:40:36 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:47:06 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,42 +98,6 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
-/* Handle ">", 'O_WRONLY' flag is used to write to the file (stdout) */
-void	handle_redit_out(t_simple_cmds *cmd)
-{
-	int	fd;
-
-	fd = open(cmd->redirects->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		exit(1);
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
-/* Handle "<", 'O_RDONLY' flag is used to read from the file (stdin) */
-void	handle_redir_in(t_simple_cmds *cmd)
-{
-	int	fd;
-
-	fd = open(cmd->redirects->file, O_RDONLY);
-	if (fd == -1)
-		exit(1);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-}
-
-/* Handle ">>", 'O_APPEND' flag is used to append to the file (stdout) */
-void	handle_redir_append(t_simple_cmds *cmd)
-{
-	int	fd;
-
-	fd = open(cmd->redirects->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		exit(1);
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
-}
-
 void	child_process_heredoc(t_simple_cmds *cmd)
 {
 	int		fd;
@@ -175,44 +139,56 @@ void	handle_redir_heredoc(t_simple_cmds *cmd)
 	unlink(".heredoc");
 }
 
+void	handle_redir_out(t_redir *redir)
+{
+	int fd;
+
+	fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	handle_redir_append(t_redir *redir)
+{
+	int fd;
+
+	fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	handle_redir_in(t_redir *redir)
+{
+	int fd;
+
+	fd = open(redir->file, O_RDONLY);
+	if (fd == -1)
+		exit(1);
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+}
+
 void	handle_redirections(t_simple_cmds *cmd)
 {
-    t_redir	*redir;
-    int		fd;
+	t_redir	*redir;
 
-    redir = cmd->redirects;
-    while (redir)
-    {
-        if (redir->type == REDIR_OUT)
-        {
-            fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd == -1)
-                exit(1);
-            dup2(fd, STDOUT_FILENO);
-            close(fd);
-        }
-        else if (redir->type == REDIR_APPEND)
-        {
-            fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (fd == -1)
-                exit(1);
-            dup2(fd, STDOUT_FILENO);
-            close(fd);
-        }
-        else if (redir->type == REDIR_IN)
-        {
-            fd = open(redir->file, O_RDONLY);
-            if (fd == -1)
-                exit(1);
-            dup2(fd, STDIN_FILENO);
-            close(fd);
-        }
-        else if (redir->type == REDIR_HEREDOC)
-        {
-            handle_redir_heredoc(cmd); // This one is fine as is
-        }
-        redir = redir->next;
-    }
+	redir = cmd->redirects;
+	while (redir)
+	{
+		if (redir->type == REDIR_OUT)
+			handle_redir_out(redir);
+		else if (redir->type == REDIR_APPEND)
+			handle_redir_append(redir);
+		else if (redir->type == REDIR_IN)
+			handle_redir_in(redir);
+		else if (redir->type == REDIR_HEREDOC)
+			handle_redir_heredoc(cmd);
+		redir = redir->next;
+	}
 }
 
 void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
