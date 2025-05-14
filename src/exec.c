@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/14 15:47:06 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/14 15:50:14 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	handle_redir_heredoc(t_simple_cmds *cmd)
 
 void	handle_redir_out(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
 	fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -152,7 +152,7 @@ void	handle_redir_out(t_redir *redir)
 
 void	handle_redir_append(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
 	fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
@@ -163,7 +163,7 @@ void	handle_redir_append(t_redir *redir)
 
 void	handle_redir_in(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
@@ -255,13 +255,13 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	if (cmd->next)
 	{
 		if (pipe(pipefd) == -1)
-		exit(1);
+			exit(1);
 	}
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-	exit(1);
+		exit(1);
 	if (cmd->pid == 0)
-			handle_child_process(shell, cmd, prev_fd, NULL);
+		handle_child_process(shell, cmd, prev_fd, NULL);
 	if (cmd->next)
 	{
 		close(pipefd[1]);
