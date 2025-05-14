@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/14 15:50:14 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/14 15:56:49 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ void	format_cmds(t_shell *shell)
 	cmd = shell->simple_cmds;
 	while (cmd)
 	{
-		// if (!cmd->str[0])
-		// {
-		// 	cmd = cmd->next;
-		// 	continue ;
-		// }
+		if (!cmd->str[0])
+		{
+			cmd = cmd->next;
+			continue ;
+		}
 		if (cmd->builtin == false)
 		{
 			if (cmd_have_no_path(cmd->str[0]))
