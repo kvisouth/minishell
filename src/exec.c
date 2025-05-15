@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/15 09:10:23 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:14:45 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	handle_redir_out(t_redir *redir)
 
 	fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		exit(1);
+		end(1, TRUE, NULL);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -156,7 +156,7 @@ void	handle_redir_append(t_redir *redir)
 
 	fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		exit(1);
+		end(1, TRUE, NULL);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -167,7 +167,7 @@ void	handle_redir_in(t_redir *redir)
 
 	fd = open(redir->file, O_RDONLY);
 	if (fd == -1)
-		exit(1);
+		end(1, TRUE, NULL);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -229,7 +229,7 @@ void	handle_child_process(t_shell *shell,
 	else
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-			end(1, TRUE, "Error: command not found");
+			end(1, TRUE, "Error: command not found\n");
 	}
 	exit(0);
 }
