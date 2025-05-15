@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/15 10:14:45 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:36:05 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void	handle_child_process(t_shell *shell,
 		exec_builtin(shell, cmd);
 		exit(0);
 	}
-	else
+	else if (cmd->str[0] != NULL && cmd->builtin == false)
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
 			end(1, TRUE, "Error: command not found\n");
@@ -324,4 +324,6 @@ int	exec(t_shell *shell)
 
 // TODO : Le parent doit ignorer les signaux des lors qu'un enfant est en cours d'execution
 // TODO : Finir heredoc
-// TODO : regler le probleme de commande vide (bad adress)
+// TODO : Reparer les ptites erreurs de export
+// TODO : Bien definir les exit codes
+// TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
