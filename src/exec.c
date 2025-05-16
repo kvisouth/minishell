@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/16 15:59:02 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/16 16:17:42 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,15 @@ void	wait_for_children(int last_pid)
 	}
 }
 
+void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
+{
+	if (cmd->next)
+	{
+		if (pipe(pipefd) == -1)
+			exit(1);
+	}
+}
+
 int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	pipefd[2];
@@ -275,11 +284,7 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	int	status;
 
 	prev_fd = -1;
-	if (cmd->next)
-	{
-		if (pipe(pipefd) == -1)
-			exit(1);
-	}
+	setup_pipes(cmd, pipefd);
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 		exit(1);
