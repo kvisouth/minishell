@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/15 10:36:05 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:59:02 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,10 +246,33 @@ void	handle_parent_process(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
 		*prev_fd = -1;
 }
 
+void	wait_for_children(int last_pid)
+{
+	int		status;
+	pid_t	pid;
+
+	pid = waitpid(-1, &status, 0);
+	while (pid > 0)
+	{
+		if (WIFEXITED(status))
+		{
+			if (pid == last_pid)
+				g_sig = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			if (pid == last_pid)
+				g_sig = 128 + WTERMSIG(status);
+		}
+		pid = waitpid(-1, &status, 0);
+	}
+}
+
 int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	pipefd[2];
 	int	prev_fd;
+	int	status;
 
 	prev_fd = -1;
 	if (cmd->next)
@@ -269,8 +292,11 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	}
 	else
 		prev_fd = -1;
-	while (waitpid(cmd->pid, NULL, 0) > 0)
-		;
+	while (waitpid(-1, &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+			g_sig = WEXITSTATUS(status);
+	}
 	return (0);
 }
 
@@ -279,6 +305,7 @@ void	execute_pipeline(t_shell *shell)
 	int				pipefd[2];
 	int				prev_fd;
 	t_simple_cmds	*cmd;
+	int				last_pid;
 
 	prev_fd = -1;
 	cmd = shell->simple_cmds;
@@ -295,10 +322,11 @@ void	execute_pipeline(t_shell *shell)
 		if (cmd->pid == 0)
 			handle_child_process(shell, cmd, prev_fd, pipefd);
 		handle_parent_process(&prev_fd, pipefd, cmd);
+		if (!cmd->next)
+			last_pid = cmd->pid;
 		cmd = cmd->next;
 	}
-	while (waitpid(-1, NULL, 0) > 0)
-		;
+	wait_for_children(last_pid);
 }
 
 int	exec(t_shell *shell)
@@ -322,8 +350,7 @@ int	exec(t_shell *shell)
 	return (0);
 }
 
-// TODO : Le parent doit ignorer les signaux des lors qu'un enfant est en cours d'execution
+// TODO : Le parent doit ignorer les signaux des lors qu'un enfant
+//        est en cours d'execution
 // TODO : Finir heredoc
-// TODO : Reparer les ptites erreurs de export
-// TODO : Bien definir les exit codes
 // TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
