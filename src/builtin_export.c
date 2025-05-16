@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nok <nok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 17:09:05 by kevso             #+#    #+#             */
-/*   Updated: 2025/04/12 09:45:37 by nok              ###   ########.fr       */
+/*   Updated: 2025/05/16 15:27:37 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,25 @@ int	check_export_args(t_simple_cmds *cmd)
 	int		i;
 
 	arg = cmd->str[1];
-	if (!arg || ft_strchr(arg, '=') == NULL)
+	if (!arg)
 		return (2);
 	i = 0;
+	if (arg[0] && !ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (0);
 		i++;
 	}
-	if (arg[i] == '=')
+	if (!arg[i])
+		return (2);
+	i++;
+	while (arg[i])
 	{
+		if (!ft_isprint(arg[i]))
+			return (0);
 		i++;
-		while (arg[i])
-		{
-			if (!ft_isprint(arg[i]) && arg[i] != '_')
-				return (0);
-			i++;
-		}
 	}
 	return (1);
 }
@@ -125,7 +126,11 @@ int	add_var_env(t_shell *shell, char *var)
 int	builtin_export(t_shell *shell, t_simple_cmds *cmd)
 {
 	if (!check_export_args(cmd))
-		return (ft_putstr_fd("incorrect format\n", 2), 1);
+	{
+		g_sig = 1;
+		ft_putstr_fd(" not a valid identifier\n", 2);
+		return (1);
+	}
 	if (check_export_args(cmd) == 2)
 		return (0);
 	if (check_var_already_exist(shell, cmd->str[1]))
