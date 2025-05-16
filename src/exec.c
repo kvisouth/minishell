@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/16 16:17:42 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/16 18:47:29 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ void	handle_child_process(t_shell *shell,
 	else if (cmd->str[0] != NULL && cmd->builtin == false)
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-			end(1, TRUE, "Error: command not found\n");
+			end(127, TRUE, "Error: command not found\n");
 	}
 	exit(0);
 }
