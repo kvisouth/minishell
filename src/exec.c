@@ -6,11 +6,29 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/16 21:40:28 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/17 13:52:15 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	set_signals_for_parent_with_children(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	reset_signals_for_parent(void)
+{
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_signals_for_child(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
 
 void	end(int code, bool kill, char *msg)
 {
@@ -103,6 +121,7 @@ void	child_process_heredoc(t_simple_cmds *cmd)
 	int		fd;
 	char	*line;
 
+	signal(SIGINT, SIG_DFL);
 	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		exit(1);
@@ -124,13 +143,21 @@ void	handle_redir_heredoc(t_simple_cmds *cmd)
 {
 	pid_t	heredoc_pid;
 	int		fd;
+	int		status;
 
+	set_signals_for_parent_with_children();
 	heredoc_pid = fork();
 	if (heredoc_pid == -1)
 		end(1, TRUE, "fork failed");
 	if (heredoc_pid == 0)
 		child_process_heredoc(cmd);
-	waitpid(heredoc_pid, NULL, 0);
+	waitpid(heredoc_pid, &status, 0);
+	reset_signals_for_parent();
+	if (WIFSIGNALED(status))
+	{
+		g_sig = 128 + WTERMSIG(status);
+		return ;
+	}
 	fd = open(".heredoc", O_RDONLY);
 	if (fd == -1)
 		end(1, TRUE, "open failed");
@@ -209,6 +236,7 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 void	handle_child_process(t_shell *shell,
 		t_simple_cmds *cmd, int prev_fd, int pipefd[2])
 {
+	set_signals_for_child();
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -290,11 +318,15 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 
 	prev_fd = -1;
 	setup_pipes(cmd, pipefd);
+	set_signals_for_parent_with_children();
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 		exit(1);
 	if (cmd->pid == 0)
+	{
+		set_signals_for_child();
 		handle_child_process(shell, cmd, prev_fd, NULL);
+	}
 	if (cmd->next)
 	{
 		close(pipefd[1]);
@@ -307,6 +339,7 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 		if (WIFEXITED(status))
 			g_sig = WEXITSTATUS(status);
 	}
+	reset_signals_for_parent();
 	return (0);
 }
 
@@ -319,6 +352,7 @@ void	execute_pipeline(t_shell *shell)
 
 	prev_fd = -1;
 	cmd = shell->simple_cmds;
+	set_signals_for_parent_with_children();
 	while (cmd)
 	{
 		if (cmd->next)
@@ -330,13 +364,17 @@ void	execute_pipeline(t_shell *shell)
 		if (cmd->pid == -1)
 			exit(1);
 		if (cmd->pid == 0)
+		{
+			set_signals_for_child();
 			handle_child_process(shell, cmd, prev_fd, pipefd);
+		}
 		handle_parent_process(&prev_fd, pipefd, cmd);
 		if (!cmd->next)
 			last_pid = cmd->pid;
 		cmd = cmd->next;
 	}
 	wait_for_children(last_pid);
+	reset_signals_for_parent();
 }
 
 int	exec(t_shell *shell)
