@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/17 13:57:12 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/17 15:08:58 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ void	handle_child_process(t_shell *shell,
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
 			handle_execve_error(cmd);
 	}
+	exit(0);
 }
 
 void	handle_parent_process(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
