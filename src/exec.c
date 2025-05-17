@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/17 13:52:15 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/17 13:57:12 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,15 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 	close(restore_stdout);
 }
 
+void	handle_execve_error(t_simple_cmds *cmd)
+{
+	if (access(cmd->str[0], X_OK) == 0 || access(cmd->str[0], F_OK) == 0
+		|| access(cmd->str[0], R_OK) == 0)
+		end(126, TRUE, "Error: permission denied\n");
+	else
+		end(127, TRUE, "Error: command not found\n");
+}
+
 void	handle_child_process(t_shell *shell,
 		t_simple_cmds *cmd, int prev_fd, int pipefd[2])
 {
@@ -257,13 +266,7 @@ void	handle_child_process(t_shell *shell,
 	else if (cmd->str[0] != NULL && cmd->builtin == false)
 	{
 		if (execve(cmd->str[0], cmd->str, shell->env) == -1)
-		{
-			if (access(cmd->str[0], X_OK) == 0 || access(cmd->str[0], F_OK) == 0
-				|| access(cmd->str[0], R_OK) == 0)
-				end(126, TRUE, "Error: permission denied\n");
-			else
-				end(127, TRUE, "Error: command not found\n");
-		}
+			handle_execve_error(cmd);
 	}
 }
 
@@ -310,7 +313,7 @@ void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
 	}
 }
 
-int	execute_command(t_shell *shell, t_simple_cmds *cmd)
+void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	pipefd[2];
 	int	prev_fd;
@@ -340,7 +343,6 @@ int	execute_command(t_shell *shell, t_simple_cmds *cmd)
 			g_sig = WEXITSTATUS(status);
 	}
 	reset_signals_for_parent();
-	return (0);
 }
 
 void	execute_pipeline(t_shell *shell)
