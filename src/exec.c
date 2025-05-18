@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/18 14:13:08 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/18 14:21:25 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 {
 	int		fd;
 	char	*line;
+	char 	*expanded;
 
 	signal(SIGINT, SIG_DFL);
 	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -129,13 +130,19 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 	{
 		line = readline("> ");
 		if (!line || ft_strcmp(line, cmd->redirects->file) == 0)
+		{
+			free(line);
 			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		}
+		expanded = expand_token(line);
 		free(line);
+		if (!expanded)
+			exit(1);
+		write(fd, expanded, ft_strlen(expanded));
+		write(fd, "\n", 1);
+		free(expanded);
 	}
 	close(fd);
-	free(line);
 	exit(0);
 	(void) shell;
 }
