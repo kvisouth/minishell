@@ -6,13 +6,33 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 16:55:17 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/18 13:38:25 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/18 14:50:53 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char *remove_quotes(char *str)
+static bool	is_quote(char c)
+{
+	return (c = '\'' || c == '"');
+}
+
+static void	process_quote(char *s, int *i, int *in_quotes, char *quote_char)
+{
+	if (!*in_quotes)
+	{
+		*in_quotes = 1;
+		*quote_char = s[*i];
+	}
+	else
+	{
+		*in_quotes = 0;
+		*quote_char = '\0';
+	}
+	(*i)++;
+}
+
+char	*remove_quotes(char *str)
 {
 	int		i;
 	int		j;
@@ -29,20 +49,12 @@ char *remove_quotes(char *str)
 		return (NULL);
 	while (str[i])
 	{
-		if ((str[i] == '\'' || str[i] == '\"') && !in_quotes)
-		{
-			in_quotes = 1;
-			quote = str[i];
-			i++;
-		}
-		else if (str[i] == quote && in_quotes)
-		{
-			in_quotes = 0;
-			quote = '\0';
-			i++;
-		}
+		if (is_quote(str[i]) && !in_quotes)
+			process_quote(str, &i, &in_quotes, &quote_char);
+		else if (str[i] == quote_char && in_quotes)
+			process_quote(str, &i, &in_quotes, &quote_char);
 		else
-			result[j++] = str[i++];
+			res[j++] = str[i++];
 	}
 	result[j] = '\0';
 	return (result);
