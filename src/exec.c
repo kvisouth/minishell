@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/17 15:08:58 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/18 14:13:08 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
-void	child_process_heredoc(t_simple_cmds *cmd)
+void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 {
 	int		fd;
 	char	*line;
@@ -137,9 +137,10 @@ void	child_process_heredoc(t_simple_cmds *cmd)
 	close(fd);
 	free(line);
 	exit(0);
+	(void) shell;
 }
 
-void	handle_redir_heredoc(t_simple_cmds *cmd)
+void	handle_redir_heredoc(t_simple_cmds *cmd, t_shell *shell)
 {
 	pid_t	heredoc_pid;
 	int		fd;
@@ -150,7 +151,7 @@ void	handle_redir_heredoc(t_simple_cmds *cmd)
 	if (heredoc_pid == -1)
 		end(1, TRUE, "fork failed");
 	if (heredoc_pid == 0)
-		child_process_heredoc(cmd);
+		child_process_heredoc(cmd, shell);
 	waitpid(heredoc_pid, &status, 0);
 	reset_signals_for_parent();
 	if (WIFSIGNALED(status))
@@ -199,7 +200,7 @@ void	handle_redir_in(t_redir *redir)
 	close(fd);
 }
 
-void	handle_redirections(t_simple_cmds *cmd)
+void	handle_redirections(t_simple_cmds *cmd, t_shell *shell)
 {
 	t_redir	*redir;
 
@@ -213,7 +214,7 @@ void	handle_redirections(t_simple_cmds *cmd)
 		else if (redir->type == REDIR_IN)
 			handle_redir_in(redir);
 		else if (redir->type == REDIR_HEREDOC)
-			handle_redir_heredoc(cmd);
+			handle_redir_heredoc(cmd, shell);
 		redir = redir->next;
 	}
 }
@@ -225,7 +226,7 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 
 	restore_stdin = dup(STDIN_FILENO);
 	restore_stdout = dup(STDOUT_FILENO);
-	handle_redirections(cmd);
+	handle_redirections(cmd, shell);
 	exec_builtin(shell, cmd);
 	dup2(restore_stdin, STDIN_FILENO);
 	dup2(restore_stdout, STDOUT_FILENO);
@@ -257,7 +258,7 @@ void	handle_child_process(t_shell *shell,
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
-	handle_redirections(cmd);
+	handle_redirections(cmd, shell);
 	if (cmd->builtin)
 	{
 		exec_builtin(shell, cmd);
