@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/18 14:21:25 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/19 16:47:04 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 {
 	int		fd;
 	char	*line;
-	char 	*expanded;
+	char	*expanded;
 
 	signal(SIGINT, SIG_DFL);
 	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -144,7 +144,6 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 	}
 	close(fd);
 	exit(0);
-	(void) shell;
 }
 
 void	handle_redir_heredoc(t_simple_cmds *cmd, t_shell *shell)
