@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 16:55:17 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/18 14:50:53 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/19 13:46:55 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ char	*remove_quotes(char *str)
 	while (str[i])
 	{
 		if (is_quote(str[i]) && !in_quotes)
-			process_quote(str, &i, &in_quotes, &quote_char);
-		else if (str[i] == quote_char && in_quotes)
-			process_quote(str, &i, &in_quotes, &quote_char);
+			process_quote(str, &i, &in_quotes, &quote);
+		else if (str[i] == quote && in_quotes)
+			process_quote(str, &i, &in_quotes, &quote);
 		else
-			res[j++] = str[i++];
+			result[j++] = str[i++];
 	}
 	result[j] = '\0';
 	return (result);

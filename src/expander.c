@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:52:52 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/18 14:47:55 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/19 13:46:13 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	init_expand(t_expand *exp)
 /* Expand environment variables in all tokens */
 static char	*replace_next_variable(char *expanded, t_expand *exp)
 {
-	char	*value;
 
 	exp->var_value = expand_variable(exp->var_name);
 	free(exp->var_name);
