@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 16:55:17 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/19 13:46:55 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/19 14:28:53 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	is_quote(char c)
 {
-	return (c = '\'' || c == '"');
+	return (c == '\'' || c == '"');
 }
 
 static void	process_quote(char *s, int *i, int *in_quotes, char *quote_char)
