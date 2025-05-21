@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/21 14:17:17 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/21 14:18:24 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,7 +409,8 @@ int	exec(t_shell *shell)
 	return (0);
 }
 
-// TODO : Le parent doit ignorer les signaux des lors qu'un enfant
-//        est en cours d'execution
-// TODO : Finir heredoc
 // TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
+
+// TODO : FIX heredoc Ctrl + C
+// TODO : FIX heredoc expand simple quotes
+// TODO : FIX expander not expanding NEW variables (export)
