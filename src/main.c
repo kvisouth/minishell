@@ -3,16 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/25 15:56:58 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/21 15:55:03 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 int	g_sig = 0;
+
+void	free_lexer(t_shell *shell)
+{
+	free_tab(shell->lexer.tokens);
+	free(shell->lexer.new_cmdline);
+}
+
+void	free_redir(t_redir *redir)
+{
+	t_redir	*next_redir;
+
+	while (redir)
+	{
+		next_redir = redir->next;
+		free(redir->file);
+		free(redir);
+		redir = next_redir;
+	}
+}
+
+void	free_simple_cmds(t_shell *shell)
+{
+	t_simple_cmds	*cmd;
+	t_simple_cmds	*next_cmd;
+
+	cmd = shell->simple_cmds;
+	while (cmd)
+	{
+		next_cmd = cmd->next;
+		free_tab(cmd->str);
+		free_redir(cmd->redirects);
+		free(cmd);
+		cmd = next_cmd;
+	}
+	shell->simple_cmds = NULL;
+}
+
+void	free_exec(t_shell *shell)
+{
+	free_lexer(shell);
+	free_simple_cmds(shell);
+}
 
 void	start_minishell(t_shell *shell)
 {
@@ -31,10 +73,12 @@ void	start_minishell(t_shell *shell)
 	}
 	if (!parser(shell))
 	{
+		free_lexer(shell);
 		return ;
 	}
 	if (!exec(shell))
 	{
+		free_exec(shell);
 		return ;
 	}
 }
