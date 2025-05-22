@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 15:40:21 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:09:54 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ void	free_redir(t_redir *redir)
     }
 }
 
-// void	free_simple_cmd(t_simple_cmds *cmd)
-// {
-//     if (!cmd)
-//         return;
+void	free_simple_cmd_exec(t_simple_cmds *cmd)
+{
+    if (!cmd)
+        return;
     
-//     if (cmd->str)
-//         free_tab(cmd->str);
+    if (cmd->str)
+        free_tab(cmd->str);
     
-//     if (cmd->redirects)
-//         free_redir(cmd->redirects);
+    if (cmd->redirects)
+        free_redir(cmd->redirects);
     
-//     free(cmd);
-// }
+    free(cmd);
+}
 
 void	free_minishell(t_shell *shell)
 {
@@ -55,7 +55,7 @@ void	free_minishell(t_shell *shell)
     while (shell->simple_cmds)
     {
         tmp = shell->simple_cmds->next;
-        free_simple_cmd(shell->simple_cmds);
+        free_simple_cmd_exec(shell->simple_cmds);
         shell->simple_cmds = tmp;
     }
 }
@@ -82,6 +82,7 @@ void	start_minishell(t_shell *shell)
 	if (!exec(shell))
 	{
 		free_minishell(shell);
+		printf("caca\n");
 		return ;
 	}
 }
