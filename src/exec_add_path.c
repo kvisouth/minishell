@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_add_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:57:34 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/21 15:30:06 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/22 15:56:48 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	*choose_path_in_dirs(char **dirs)
 			cmd = ft_strdup(dirs[i]);
 			if (!cmd)
 				return (NULL);
-			free(dirs);
+			free_tab(dirs);
 			return (cmd);
 		}
 		i++;
@@ -117,7 +117,7 @@ char	*choose_path_in_dirs(char **dirs)
 	cmd = ft_strdup(dirs[0]);
 	if (!cmd)
 		return (NULL);
-	free(dirs);
+	free_tab(dirs);
 	return (cmd);
 }
 

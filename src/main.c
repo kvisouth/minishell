@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/21 15:55:03 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/22 15:40:21 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,50 @@
 
 int	g_sig = 0;
 
-void	free_lexer(t_shell *shell)
-{
-	free_tab(shell->lexer.tokens);
-	free(shell->lexer.new_cmdline);
-}
-
 void	free_redir(t_redir *redir)
 {
-	t_redir	*next_redir;
+    t_redir	*tmp;
 
-	while (redir)
-	{
-		next_redir = redir->next;
-		free(redir->file);
-		free(redir);
-		redir = next_redir;
-	}
+    while (redir)
+    {
+        tmp = redir->next;
+        if (redir->file)
+            free(redir->file);
+        free(redir);
+        redir = tmp;
+    }
 }
 
-void	free_simple_cmds(t_shell *shell)
-{
-	t_simple_cmds	*cmd;
-	t_simple_cmds	*next_cmd;
+// void	free_simple_cmd(t_simple_cmds *cmd)
+// {
+//     if (!cmd)
+//         return;
+    
+//     if (cmd->str)
+//         free_tab(cmd->str);
+    
+//     if (cmd->redirects)
+//         free_redir(cmd->redirects);
+    
+//     free(cmd);
+// }
 
-	cmd = shell->simple_cmds;
-	while (cmd)
-	{
-		next_cmd = cmd->next;
-		free_tab(cmd->str);
-		free_redir(cmd->redirects);
-		free(cmd);
-		cmd = next_cmd;
-	}
-	shell->simple_cmds = NULL;
-}
-
-void	free_exec(t_shell *shell)
+void	free_minishell(t_shell *shell)
 {
-	free_lexer(shell);
-	free_simple_cmds(shell);
+    t_simple_cmds *tmp;
+    
+    free(shell->cmdline);
+    free(shell->path);
+    
+    free_tab(shell->lexer.tokens);
+    free(shell->lexer.new_cmdline);
+
+    while (shell->simple_cmds)
+    {
+        tmp = shell->simple_cmds->next;
+        free_simple_cmd(shell->simple_cmds);
+        shell->simple_cmds = tmp;
+    }
 }
 
 void	start_minishell(t_shell *shell)
@@ -73,12 +77,11 @@ void	start_minishell(t_shell *shell)
 	}
 	if (!parser(shell))
 	{
-		free_lexer(shell);
 		return ;
 	}
 	if (!exec(shell))
 	{
-		free_exec(shell);
+		free_minishell(shell);
 		return ;
 	}
 }
