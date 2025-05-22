@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:57:34 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 15:56:48 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:56:02 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd)
 	dirs = ft_split(shell->path, ':');
 	if (!dirs)
 		return (0);
+	free(shell->path);
 	dirs = concat_slash_to_dirs(dirs);
 	if (!dirs)
 		return (0);
