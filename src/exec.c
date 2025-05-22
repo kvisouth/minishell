@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 18:31:29 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:55:26 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 			free(line);
 			break ;
 		}
-		expanded = expand_heredoc_line(line);
+		expanded = expand_heredoc_line(line, shell->env);
 		free(line);
 		if (!expanded)
 			exit(1);

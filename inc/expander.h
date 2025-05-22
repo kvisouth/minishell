@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:49:47 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/18 17:34:17 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/22 19:45:08 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ typedef struct s_expand
 
 /* Main functions */
 int			expand_tokens(t_shell *shell);
-char		*expand_token(char *token);
+char		*expand_token(char *token, char **env);
 
 /* Helper functions */
 char		*find_next_variable(char *str, t_expand *exp);
-char		*expand_variable(char *var_name);
+char		*expand_variable(char *var_name, char **env);
 int			is_valid_var_char(char c, int first_char);
 int			should_expand_in_quotes(char *token, int pos, t_expand *exp);
 char		*replace_variable(char *token, t_expand *exp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:27:34 by kevisout          #+#    #+#             */
-/*   Updated: 2025/05/22 18:30:28 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:56:09 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,37 +37,37 @@ int	should_expand_in_heredoc(char *token, int pos, t_expand *exp)
 /*
 **  Expand all variables in a heredoc line.
 */
-char	*expand_heredoc_line(char *line)
+char *expand_heredoc_line(char *line, char **env)
 {
-	char		*expanded;
-	t_expand	exp;
+    char        *expanded;
+    t_expand    exp;
 
-	init_expand(&exp);
-	expanded = ft_strdup(line);
-	if (!expanded)
-		return (NULL);
-	exp.var_name = find_next_variable(expanded, &exp);
-	while (exp.var_name)
-	{
-		if (!should_expand_in_heredoc(expanded, exp.start_pos, &exp))
-		{
-			free(exp.var_name);
-			exp.start_pos = exp.end_pos;
-		}
-		else
-		{
-			exp.var_value = expand_variable(exp.var_name);
-			free(exp.var_name);
-			if (!exp.var_value)
-				return (NULL);
-			exp.expanded = replace_variable(expanded, &exp);
-			free(exp.var_value);
-			free(expanded);
-			if (!exp.expanded)
-				return (NULL);
-			expanded = exp.expanded;
-		}
-		exp.var_name = find_next_variable(expanded, &exp);
-	}
-	return (expanded);
+    init_expand(&exp);
+    expanded = ft_strdup(line);
+    if (!expanded)
+        return (NULL);
+    exp.var_name = find_next_variable(expanded, &exp);
+    while (exp.var_name)
+    {
+        if (!should_expand_in_heredoc(expanded, exp.start_pos, &exp))
+        {
+            free(exp.var_name);
+            exp.start_pos = exp.end_pos;
+        }
+        else
+        {
+            exp.var_value = expand_variable(exp.var_name, env);
+            free(exp.var_name);
+            if (!exp.var_value)
+                return (NULL);
+            exp.expanded = replace_variable(expanded, &exp);
+            free(exp.var_value);
+            free(expanded);
+            if (!exp.expanded)
+                return (NULL);
+            expanded = exp.expanded;
+        }
+        exp.var_name = find_next_variable(expanded, &exp);
+    }
+    return (expanded);
 }

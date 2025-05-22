@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:47:40 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/18 14:50:12 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/22 19:46:38 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,39 @@ int	should_expand_in_quotes(char *token, int pos, t_expand *exp)
 		exp->in_quotes = 2;
 	return (!in_sq);
 }
-
-/* Retrieve the value for a variable name (handles “?”) */
-char	*expand_variable(char *var_name)
+// Add this helper function to find values in the environment
+char *get_env_value(char *name, char **env)
 {
-	extern int	g_sig;
-	char		*val;
+    int i;
+    size_t name_len;
+    
+    if (!name || !env)
+        return (NULL);
+    
+    name_len = ft_strlen(name);
+    i = 0;
+    while (env[i])
+    {
+        if (ft_strncmp(env[i], name, name_len) == 0 && env[i][name_len] == '=')
+            return (env[i] + name_len + 1);
+        i++;
+    }
+    
+    return (NULL);
+}
+/* Retrieve the value for a variable name (handles “?”) */
+char *expand_variable(char *var_name, char **env)
+{
+    char *var_value;
+    extern int g_sig;
 
-	if (ft_strcmp(var_name, "?") == 0)
-		return (ft_itoa(g_sig));
-	val = getenv(var_name);
-	if (!val)
-		return (ft_strdup(""));
-	return (ft_strdup(val));
+    if (ft_strcmp(var_name, "?") == 0)
+        return (ft_itoa(g_sig));
+    var_value = get_env_value(var_name, env);
+    if (!var_value)
+        return (ft_strdup(""));
+    
+    return (ft_strdup(var_value));
 }
 
 /* Replace the next occurrence in token with exp->var_value */
