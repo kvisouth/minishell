@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:52:52 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/22 19:49:26 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/22 21:56:01 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,46 +22,55 @@ void	init_expand(t_expand *exp)
 	exp->var_value = NULL;
 }
 
-/*
-**  Expand all variables in a single token.
-*/
-char *expand_token(char *token, char **env)
+static	char	*process_variable(char *expanded, t_expand *exp, char **env)
 {
-    char    *expanded;
-    t_expand exp;
-
-    init_expand(&exp);
-    expanded = ft_strdup(token);
-    if (!expanded)
-        return (NULL);
-    while ((exp.var_name = find_next_variable(expanded, &exp)))
-    {
-        if (!should_expand_in_quotes(expanded, exp.start_pos, &exp))
-        {
-            exp.start_pos = exp.end_pos;
-            free(exp.var_name);
-            continue;
-        }
-        exp.var_value = expand_variable(exp.var_name, env);
-        free(exp.var_name);
-        if (!exp.var_value)
-        {
-            free(expanded);
-            return (NULL);
-        }
-        exp.expanded = replace_variable(expanded, &exp);
-        free(exp.var_value);
-        free(expanded);
-        if (!exp.expanded)
-            return (NULL);
-        expanded = exp.expanded;
-    }
-    return (expanded);
+	exp->var_value = expand_variable(exp->var_name, env);
+	free(exp->var_name);
+	if (!exp->var_value)
+	{
+		free(expanded);
+		return (NULL);
+	}
+	exp->expanded = replace_variable(expanded, exp);
+	free(exp->var_value);
+	free(expanded);
+	if (!exp->expanded)
+		return (NULL);
+	return (exp->expanded);
 }
 
-/*
-**  Run expand_token() on every lexer token, remove quotes where needed.
-*/
+//Expand all variables in a single token.
+char	*expand_token(char *token, char **env)
+{
+	char		*expanded;
+	t_expand	exp;
+
+	init_expand(&exp);
+	expanded = ft_strdup(token);
+	if (!expanded)
+		return (NULL);
+	while (1)
+	{
+		exp.var_name = find_next_variable(expanded, &exp);
+		if (!exp.var_name)
+			break ;
+		if (!should_expand_in_quotes(expanded, exp.start_pos, &exp))
+		{
+			free(exp.var_name);
+			exp.var_name = NULL;
+			exp.start_pos = exp.end_pos;
+			continue ;
+		}
+		expanded = process_variable(expanded, &exp, env);
+		if (!expanded)
+			return (NULL);
+		exp.start_pos = 0;
+	}
+	return (expanded);
+}
+
+// Run expand_token() on every lexer token, remove quotes where needed.
+
 int	expand_tokens(t_shell *shell)
 {
 	int		i;

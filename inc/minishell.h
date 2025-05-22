@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/17 13:48:09 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/22 21:13:15 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_shell
 	int		pipefd[2];
 	t_lexer	lexer;
 	t_simple_cmds	*simple_cmds;
-    t_parser        parser;         // Parser state
+    t_parser		parser;
 }	t_shell;
 
 char	**init_shell_env(char **envp);

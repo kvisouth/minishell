@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:49:47 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/22 19:45:08 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/22 21:24:57 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ int			should_expand_in_quotes(char *token, int pos, t_expand *exp);
 char		*replace_variable(char *token, t_expand *exp);
 void		init_expand(t_expand *exp);
 char		*remove_quotes(char *str);
+char		*replace_variable(char *token, t_expand *exp);
 #endif
