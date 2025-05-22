@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 16:51:40 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/22 18:33:41 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,7 @@ int		builtin_unset(t_shell *shell, t_simple_cmds *cmd);
 int 	builtin_export(t_shell *shell, t_simple_cmds *cmd);
 void	builtin_exit(char **args);
 char	**copy_envp(char **envp);
+
+char		*expand_heredoc_line(char *line);
 
 #endif
