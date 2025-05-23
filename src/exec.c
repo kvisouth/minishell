@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/23 15:49:58 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:31:46 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,5 +412,3 @@ int	exec(t_shell *shell)
 // TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
 
 // TODO : FIX heredoc Ctrl + C
-// TODO : FIX heredoc expand simple quotes
-// TODO : FIX expander not expanding NEW variables (export)
