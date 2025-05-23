@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/23 17:12:45 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:32:03 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,12 @@ void	format_cmds(t_shell *shell)
 	}
 }
 
+void	write_end_of_heredoc(int fd, char *expanded)
+{
+	write(fd, expanded, ft_strlen(expanded));
+	write(fd, "\n", 1);
+}
+
 void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 {
 	int		fd;
@@ -138,8 +144,7 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 		free(line);
 		if (!expanded)
 			exit(1);
-		write(fd, expanded, ft_strlen(expanded));
-		write(fd, "\n", 1);
+		write_end_of_heredoc(fd, expanded);
 		free(expanded);
 	}
 	close(fd);
