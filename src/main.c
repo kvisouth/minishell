@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 16:56:38 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:16:15 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_redir(t_redir *redir)
 void	free_simple_cmd_exec(t_simple_cmds *cmd)
 {
 	if (!cmd)
-		return;
+		return ;
 	if (cmd->str)
 		free_tab(cmd->str);
 	if (cmd->redirects)
@@ -41,8 +41,8 @@ void	free_simple_cmd_exec(t_simple_cmds *cmd)
 
 void	free_minishell(t_shell *shell)
 {
-	t_simple_cmds *tmp;
-	
+	t_simple_cmds	*tmp;
+
 	free(shell->cmdline);
 	free_tab(shell->lexer.tokens);
 	free(shell->lexer.new_cmdline);
@@ -106,7 +106,7 @@ void	minishell_loop(t_shell *shell)
 			free_tab(shell->env);
 			free(cmdline);
 			rl_clear_history();
-			break;
+			break ;
 		}
 		add_history(cmdline);
 		shell->cmdline = cmdline;
@@ -117,6 +117,7 @@ void	minishell_loop(t_shell *shell)
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	shell;
+
 	if (ac != 1 && av)
 		return (1);
 	shell.env = NULL;
@@ -126,4 +127,3 @@ int	main(int ac, char **av, char **envp)
 	minishell_loop(&shell);
 	return (0);
 }
-

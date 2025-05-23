@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/23 16:31:46 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:12:45 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 	}
 	close(fd);
 	exit(0);
-	(void) shell;
 }
 
 void	handle_redir_heredoc(t_simple_cmds *cmd, t_shell *shell)
@@ -171,7 +170,6 @@ void	handle_redir_heredoc(t_simple_cmds *cmd, t_shell *shell)
 		end(1, TRUE, "open failed");
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	unlink(".heredoc");
 }
 
 void	handle_redir_out(t_redir *redir)
@@ -406,6 +404,11 @@ int	exec(t_shell *shell)
 	}
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdout);
+	if (access(".heredoc", F_OK) == 0 || access(".heredoc", R_OK) == 0)
+	{
+		if (unlink(".heredoc") == -1)
+			end(1, TRUE, "unlink failed");
+	}
 	return (0);
 }
 

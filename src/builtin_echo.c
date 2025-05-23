@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:34:54 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/11 14:01:50 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/23 17:13:24 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	check_for_n_flag(char **args, int *index)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	bool	found;
 
 	i = 1;
@@ -28,11 +28,11 @@ int	check_for_n_flag(char **args, int *index)
 			while (args[i][j] == 'n')
 				j++;
 			if (args[i][j] != '\0')
-				break;
+				break ;
 			found = true;
 		}
 		else
-			break;
+			break ;
 		i++;
 	}
 	*index = i;
