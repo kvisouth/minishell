@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:27:34 by kevisout          #+#    #+#             */
-/*   Updated: 2025/05/22 21:40:12 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/23 15:50:50 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*expand_heredoc_line(char *line, char **env)
 			if (!expanded)
 				return (NULL);
 		}
+		exp.var_name = find_next_variable(expanded, &exp);
 	}
 	return (expanded);
 }
