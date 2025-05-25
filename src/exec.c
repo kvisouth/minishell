@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/25 14:23:54 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/25 14:31:57 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,6 +418,15 @@ void	execute_pipeline(t_shell *shell)
 	reset_signals_for_parent();
 }
 
+void	unlink_heredoc_file(void)
+{
+	if (access(".heredoc", F_OK) == 0 || access(".heredoc", R_OK) == 0)
+	{
+		if (unlink(".heredoc") == -1)
+			end(1, TRUE, "unlink failed");
+	}
+}
+
 int	exec(t_shell *shell)
 {
 	int	restore_stdout;
@@ -436,11 +445,7 @@ int	exec(t_shell *shell)
 	}
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdout);
-	if (access(".heredoc", F_OK) == 0 || access(".heredoc", R_OK) == 0)
-	{
-		if (unlink(".heredoc") == -1)
-			end(1, TRUE, "unlink failed");
-	}
+	unlink_heredoc_file();
 	return (0);
 }
 
