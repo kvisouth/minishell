@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/25 13:43:56 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/25 14:23:54 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,6 +368,35 @@ void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	reset_signals_for_parent();
 }
 
+void	init_pipeline(int *prev_fd, t_simple_cmds **cmd, t_shell *shell)
+{
+	*prev_fd = -1;
+	*cmd = shell->simple_cmds;
+	set_signals_for_parent_with_children();
+}
+
+void	create_pipe_for_cmd(t_simple_cmds *cmd, int pipefd[2])
+{
+	if (cmd->next)
+	{
+		if (pipe(pipefd) == -1)
+			exit(1);
+	}
+}
+
+void	fork_and_execute_cmd(t_shell *shell, t_simple_cmds *cmd,
+							int prev_fd, int pipefd[2])
+{
+	cmd->pid = fork();
+	if (cmd->pid == -1)
+		exit(1);
+	if (cmd->pid == 0)
+	{
+		set_signals_for_child();
+		handle_child_process(shell, cmd, prev_fd, pipefd);
+	}
+}
+
 void	execute_pipeline(t_shell *shell)
 {
 	int				pipefd[2];
@@ -375,24 +404,11 @@ void	execute_pipeline(t_shell *shell)
 	t_simple_cmds	*cmd;
 	int				last_pid;
 
-	prev_fd = -1;
-	cmd = shell->simple_cmds;
-	set_signals_for_parent_with_children();
+	init_pipeline(&prev_fd, &cmd, shell);
 	while (cmd)
 	{
-		if (cmd->next)
-		{
-			if (pipe(pipefd) == -1)
-				exit(1);
-		}
-		cmd->pid = fork();
-		if (cmd->pid == -1)
-			exit(1);
-		if (cmd->pid == 0)
-		{
-			set_signals_for_child();
-			handle_child_process(shell, cmd, prev_fd, pipefd);
-		}
+		create_pipe_for_cmd(cmd, pipefd);
+		fork_and_execute_cmd(shell, cmd, prev_fd, pipefd);
 		handle_parent_process(&prev_fd, pipefd, cmd);
 		if (!cmd->next)
 			last_pid = cmd->pid;
