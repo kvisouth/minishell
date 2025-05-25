@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/23 17:32:03 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:43:56 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,11 +325,26 @@ void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
 	}
 }
 
+void	wait_for_command(void)
+{
+	int		status;
+	pid_t	pid;
+
+	pid = waitpid(-1, &status, 0);
+	while (pid > 0)
+	{
+		if (WIFEXITED(status))
+			g_sig = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_sig = 128 + WTERMSIG(status);
+		pid = waitpid(-1, &status, 0);
+	}
+}
+
 void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	pipefd[2];
 	int	prev_fd;
-	int	status;
 
 	prev_fd = -1;
 	setup_pipes(cmd, pipefd);
@@ -349,11 +364,7 @@ void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	}
 	else
 		prev_fd = -1;
-	while (waitpid(-1, &status, 0) > 0)
-	{
-		if (WIFEXITED(status))
-			g_sig = WEXITSTATUS(status);
-	}
+	wait_for_command();
 	reset_signals_for_parent();
 }
 
