@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/26 15:40:40 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/26 16:32:10 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	free_minishell(t_shell *shell)
 	while (shell->simple_cmds)
 	{
 		tmp = shell->simple_cmds->next;
-		free_simple_cmd(shell->simple_cmds);
+		free_simple_cmd_exec(shell->simple_cmds);
 		shell->simple_cmds = tmp;
 	}
 }
