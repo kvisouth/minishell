@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:57:05 by kevisout          #+#    #+#             */
-/*   Updated: 2025/03/13 16:53:38 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/26 12:52:57 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	**ft_split(char const *s, char c)
 		if (*s != c && *s)
 		{
 			tab[i] = dup_str(s, c);
-			if (!tab)
+			if (!tab[i])
 				return (free_all(tab), NULL);
 			i++;
 		}

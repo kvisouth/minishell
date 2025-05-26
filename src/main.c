@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/23 17:16:15 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:40:40 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	free_minishell(t_shell *shell)
 	while (shell->simple_cmds)
 	{
 		tmp = shell->simple_cmds->next;
-		free_simple_cmd_exec(shell->simple_cmds);
+		free_simple_cmd(shell->simple_cmds);
 		shell->simple_cmds = tmp;
 	}
 }
@@ -78,6 +78,8 @@ void	start_minishell(t_shell *shell)
 		free_minishell(shell);
 		return ;
 	}
+	free_minishell(shell);
+
 }
 
 void	sig_handler(int sig)
