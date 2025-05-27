@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/27 13:22:09 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 13:50:07 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -516,6 +516,4 @@ int	exec(t_shell *shell)
 	return (0);
 }
 
-// TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
-
-// TODO : FIX heredoc Ctrl + C
+// TODO : les fichiers heredoc ne sont pas supprimés si interrompu avec ctrl+c
