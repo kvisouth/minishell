@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/27 13:01:24 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 13:22:09 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,7 @@ void	handle_execve_error(t_simple_cmds *cmd)
 {
 	if (access(cmd->str[0], X_OK) == 0 || access(cmd->str[0], F_OK) == 0
 		|| access(cmd->str[0], R_OK) == 0)
-		end(126, TRUE, "Error: permission denied\n");
+		end(126, TRUE, "Error: Permission denied\n");
 	else
 		end(127, TRUE, "Error: command not found\n");
 }
