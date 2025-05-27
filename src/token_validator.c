@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:07:22 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/17 16:17:53 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/27 22:17:43 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int	handle_no_redirect(t_shell *shell, int token_count, int i, int *skip)
 	{
 		if (i == token_count - 1 || is_operator(shell->lexer.tokens[i + 1]))
 		{
-			ft_putstr_fd("minishell: syntax error:\
-				 missing redirect target\n", 2);
+			ft_putstr_fd("mini: syntax error: missing redirect target\n", 2);
 			return (0);
 		}
 		*skip = 1;
