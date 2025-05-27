@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/27 13:50:07 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 17:55:49 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,27 +151,19 @@ void	child_process_heredoc(char *delimiter, char *filename, t_shell *shell)
 	exit(0);
 }
 
-int	process_one_heredoc(t_redir *redir, int cmd_index, t_shell *shell)
+int	process_one_heredoc(t_redir *redir, t_shell *shell)
 {
 	pid_t	heredoc_pid;
 	int		status;
 	char	*filename;
-	char	*idx_str;
 
-	idx_str = ft_itoa(cmd_index);
-	if (!idx_str)
-		return (0);
-	filename = ft_strjoin(".heredoc_", idx_str);
-	free(idx_str);
+	filename = ft_strdup(".heredoc");
 	if (!filename)
 		return (0);
 	set_signals_for_parent_with_children();
 	heredoc_pid = fork();
 	if (heredoc_pid == -1)
-	{
-		free(filename);
-		return (0);
-	}
+		return (free(filename), 0);
 	if (heredoc_pid == 0)
 		child_process_heredoc(redir->file, filename, shell);
 	waitpid(heredoc_pid, &status, 0);
@@ -199,7 +191,7 @@ int	process_all_heredocs(t_shell *shell)
 		{
 			if (redir->type == REDIR_HEREDOC)
 			{
-				if (!process_one_heredoc(redir, cmd->index, shell))
+				if (!process_one_heredoc(redir, shell))
 					return (0);
 			}
 			redir = redir->next;
@@ -461,30 +453,15 @@ void	execute_pipeline(t_shell *shell)
 	reset_signals_for_parent();
 }
 
-void	unlink_heredoc_files(t_shell *shell)
+void	unlink_heredoc()
 {
-	t_simple_cmds	*cmd;
-	t_redir			*redir;
-
-	cmd = shell->simple_cmds;
-	while (cmd)
+	if (access(".heredoc", F_OK) == 1)
 	{
-		redir = cmd->redirects;
-		while (redir)
+		if (unlink(".heredoc") == -1)
 		{
-			if (redir->type == REDIR_HEREDOC && redir->heredoc_file)
-			{
-				if (access(redir->heredoc_file, F_OK) == 0)
-				{
-					if (unlink(redir->heredoc_file) == -1)
-						end(1, FALSE, "unlink failed");
-				}
-				free(redir->heredoc_file);
-				redir->heredoc_file = NULL;
-			}
-			redir = redir->next;
+			perror("Error unlinking .heredoc");
+			exit(1);
 		}
-		cmd = cmd->next;
 	}
 }
 
@@ -497,6 +474,7 @@ int	exec(t_shell *shell)
 	format_cmds(shell);
 	if (!process_all_heredocs(shell))
 	{
+		unlink_heredoc();
 		dup2(restore_stdout, STDOUT_FILENO);
 		close(restore_stdout);
 		return (0);
@@ -512,7 +490,7 @@ int	exec(t_shell *shell)
 	}
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdout);
-	unlink_heredoc_files(shell);
+	unlink_heredoc();
 	return (0);
 }
 
