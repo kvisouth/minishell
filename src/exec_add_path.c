@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_add_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:57:34 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/26 15:43:12 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/27 13:20:24 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd)
 	char	*cmd_path;
 	char	**dirs;
 
-	
 	shell->path = get_path(shell);
 	if (!shell->path)
 		return (0);
