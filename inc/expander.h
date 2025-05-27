@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:49:47 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/23 15:47:00 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:12:51 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-#include "minishell.h"
+# include "minishell.h"
+
 typedef struct s_expand
 {
 	int		start_pos;
@@ -22,8 +23,6 @@ typedef struct s_expand
 	char	*expanded;
 	char	*var_name;
 	char	*var_value;
-	
-	
 }	t_expand;
 
 /* Main functions */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:18:59 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/26 15:52:36 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/27 11:03:21 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	free_simple_cmd(t_simple_cmds *cmd)
 				cmd->str[i] = NULL;
 				i++;
 			}
-		free(cmd->str);
-		cmd->str = NULL;
+			free(cmd->str);
+			cmd->str = NULL;
 		}
 		free_redirections(cmd->redirects);
 		cmd->redirects = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:12:07 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/09 16:21:47 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 11:13:38 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_lexer
 	char	quote_char;
 }	t_lexer;
 
-typedef struct s_shell t_shell;
+typedef struct s_shell	t_shell;
 
 /* LEXER */
 int		is_op(char c);

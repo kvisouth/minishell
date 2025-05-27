@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 20:15:03 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/27 11:11:59 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "../inc/minishell.h"
 
-typedef struct s_shell t_shell;
+typedef struct s_shell	t_shell;
 
 int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd);
 int	exec(t_shell *shell);
