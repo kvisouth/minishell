@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/26 16:32:10 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/27 10:56:02 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,21 @@ void	start_minishell(t_shell *shell)
 {
 	shell->end = false;
 	if (!lexer(shell))
-	{
-		free(shell->cmdline);
-		return ;
-	}
+		return (free(shell->lexer.new_cmdline));
 	if (!expand_tokens(shell))
 	{
 		free(shell->cmdline);
 		free_tab(shell->lexer.tokens);
-		free(shell->new_cmdline);
-		return ;
+		return (free(shell->lexer.new_cmdline));
 	}
+	if (!validate_tokens(shell))
+    {
+        free(shell->cmdline);
+        free_tab(shell->lexer.tokens);
+        return (free(shell->lexer.new_cmdline));
+    }
 	if (!parser(shell))
-	{
 		return ;
-	}
 	if (!exec(shell))
 	{
 		free_minishell(shell);
