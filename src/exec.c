@@ -6,7 +6,7 @@
 /*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/27 17:55:49 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:57:33 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -453,7 +453,7 @@ void	execute_pipeline(t_shell *shell)
 	reset_signals_for_parent();
 }
 
-void	unlink_heredoc()
+void	unlink_heredoc(void)
 {
 	if (access(".heredoc", F_OK) == 1)
 	{
