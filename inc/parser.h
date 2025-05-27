@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/18 15:08:34 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 12:46:54 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_redir
 {
 	t_redir_type			type;
 	char					*file;
+	char					*heredoc_file;
 	struct s_redir			*next;
 }				t_redir;
 
