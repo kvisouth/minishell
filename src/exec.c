@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/25 14:31:57 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/27 18:35:04 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,20 +122,20 @@ void	write_end_of_heredoc(int fd, char *expanded)
 	write(fd, "\n", 1);
 }
 
-void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
+void	child_process_heredoc(char *delimiter, char *filename, t_shell *shell)
 {
 	int		fd;
 	char	*line;
 	char	*expanded;
 
 	signal(SIGINT, SIG_DFL);
-	fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		exit(1);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, cmd->redirects->file) == 0)
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
@@ -151,26 +151,61 @@ void	child_process_heredoc(t_simple_cmds *cmd, t_shell *shell)
 	exit(0);
 }
 
-void	handle_redir_heredoc(t_simple_cmds *cmd, t_shell *shell)
+int	process_one_heredoc(t_redir *redir, t_shell *shell)
 {
 	pid_t	heredoc_pid;
-	int		fd;
 	int		status;
+	char	*filename;
 
+	filename = ft_strdup(".heredoc");
+	if (!filename)
+		return (0);
 	set_signals_for_parent_with_children();
 	heredoc_pid = fork();
 	if (heredoc_pid == -1)
-		end(1, TRUE, "fork failed");
+		return (free(filename), 0);
 	if (heredoc_pid == 0)
-		child_process_heredoc(cmd, shell);
+		child_process_heredoc(redir->file, filename, shell);
 	waitpid(heredoc_pid, &status, 0);
 	reset_signals_for_parent();
 	if (WIFSIGNALED(status))
 	{
 		g_sig = 128 + WTERMSIG(status);
-		return ;
+		free(filename);
+		return (0);
 	}
-	fd = open(".heredoc", O_RDONLY);
+	redir->heredoc_file = filename;
+	return (1);
+}
+
+int	process_all_heredocs(t_shell *shell)
+{
+	t_simple_cmds	*cmd;
+	t_redir			*redir;
+
+	cmd = shell->simple_cmds;
+	while (cmd)
+	{
+		redir = cmd->redirects;
+		while (redir)
+		{
+			if (redir->type == REDIR_HEREDOC)
+			{
+				if (!process_one_heredoc(redir, shell))
+					return (0);
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+	return (1);
+}
+
+void	handle_redir_heredoc(t_redir *redir)
+{
+	int	fd;
+
+	fd = open(redir->heredoc_file, O_RDONLY);
 	if (fd == -1)
 		end(1, TRUE, "open failed");
 	dup2(fd, STDIN_FILENO);
@@ -210,7 +245,7 @@ void	handle_redir_in(t_redir *redir)
 	close(fd);
 }
 
-void	handle_redirections(t_simple_cmds *cmd, t_shell *shell)
+void	handle_redirections(t_simple_cmds *cmd)
 {
 	t_redir	*redir;
 
@@ -224,7 +259,7 @@ void	handle_redirections(t_simple_cmds *cmd, t_shell *shell)
 		else if (redir->type == REDIR_IN)
 			handle_redir_in(redir);
 		else if (redir->type == REDIR_HEREDOC)
-			handle_redir_heredoc(cmd, shell);
+			handle_redir_heredoc(redir);
 		redir = redir->next;
 	}
 }
@@ -236,7 +271,7 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 
 	restore_stdin = dup(STDIN_FILENO);
 	restore_stdout = dup(STDOUT_FILENO);
-	handle_redirections(cmd, shell);
+	handle_redirections(cmd);
 	exec_builtin(shell, cmd);
 	dup2(restore_stdin, STDIN_FILENO);
 	dup2(restore_stdout, STDOUT_FILENO);
@@ -248,7 +283,7 @@ void	handle_execve_error(t_simple_cmds *cmd)
 {
 	if (access(cmd->str[0], X_OK) == 0 || access(cmd->str[0], F_OK) == 0
 		|| access(cmd->str[0], R_OK) == 0)
-		end(126, TRUE, "Error: permission denied\n");
+		end(126, TRUE, "Error: Permission denied\n");
 	else
 		end(127, TRUE, "Error: command not found\n");
 }
@@ -268,7 +303,7 @@ void	handle_child_process(t_shell *shell,
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
-	handle_redirections(cmd, shell);
+	handle_redirections(cmd);
 	if (cmd->builtin)
 	{
 		exec_builtin(shell, cmd);
@@ -418,12 +453,14 @@ void	execute_pipeline(t_shell *shell)
 	reset_signals_for_parent();
 }
 
-void	unlink_heredoc_file(void)
+void	unlink_heredoc(void)
 {
-	if (access(".heredoc", F_OK) == 0 || access(".heredoc", R_OK) == 0)
+	if (access(".heredoc", F_OK) == -1)
+		return ;
+	if (unlink(".heredoc") == 1)
 	{
-		if (unlink(".heredoc") == -1)
-			end(1, TRUE, "unlink failed");
+		perror("Error unlinking .heredoc");
+		exit(1);
 	}
 }
 
@@ -434,6 +471,13 @@ int	exec(t_shell *shell)
 	restore_stdout = dup(STDOUT_FILENO);
 	count_cmds(shell);
 	format_cmds(shell);
+	if (!process_all_heredocs(shell))
+	{
+		unlink_heredoc();
+		dup2(restore_stdout, STDOUT_FILENO);
+		close(restore_stdout);
+		return (0);
+	}
 	if (shell->nb_cmds > 1)
 		execute_pipeline(shell);
 	else
@@ -445,10 +489,8 @@ int	exec(t_shell *shell)
 	}
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdout);
-	unlink_heredoc_file();
+	unlink_heredoc();
 	return (0);
 }
 
-// TODO : TOUT FREE a l'utilisation de end() (parser + lexer?)
-
-// TODO : FIX heredoc Ctrl + C
+// TODO : les fichiers heredoc ne sont pas supprimés si interrompu avec ctrl+c
