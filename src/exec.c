@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/27 18:35:04 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:33:44 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,3 +494,5 @@ int	exec(t_shell *shell)
 }
 
 // TODO : les fichiers heredoc ne sont pas supprimés si interrompu avec ctrl+c
+// LEAKS : ctrl+c heredoc
+// LEAKS : ' '
