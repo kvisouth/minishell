@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_insert_spaces.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:58:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/03/07 15:17:12 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/29 13:37:22 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ char	*add_spaces_to_cmdline(char *cmdline, t_lexer *lex)
 	lex->quote_char = '\0';
 	while (cmdline[i])
 	{
-		handle_quotes(cmdline, lex, &i, &j);
 		handle_operators(cmdline, lex, &i, &j);
+		handle_quotes(cmdline, lex, &i, &j);
 	}
 	lex->new_cmdline[j] = '\0';
 	return (lex->new_cmdline);

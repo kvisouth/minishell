@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/26 15:52:10 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:41:30 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	print_commands(t_simple_cmds *cmds)
 		{
 			i++;
 		}
-			current = current->next;
+		current = current->next;
 	}
 }
 
