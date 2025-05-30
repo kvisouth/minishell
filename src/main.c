@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/29 13:43:55 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:44:08 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ void	start_minishell(t_shell *shell)
 {
 	shell->end = false;
 	if (!lexer(shell))
+	{
+		free(shell->lexer.new_cmdline);
+		free(shell->lexer.tokens);
 		return (free(shell->cmdline));
+	}
 	if (!expand_tokens(shell))
 	{
 		free(shell->cmdline);
@@ -27,6 +31,7 @@ void	start_minishell(t_shell *shell)
 	}
 	if (!parser(shell))
 	{
+		free_minishell(shell);
 		return ;
 	}
 	if (!exec(shell))

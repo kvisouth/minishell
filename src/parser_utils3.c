@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@42.fr>                    +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:42:41 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/26 14:02:37 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/30 13:46:06 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,12 @@ int	get_redirection_tokens(t_shell *shell, char **token, char **target)
 	*token = next_token(shell);
 	if (!*token || !is_redirection(*token))
 	{
-		free(*token);
 		*token = NULL;
 		return (0);
 	}
 	*target = next_token(shell);
 	if (!*target)
 	{
-		free(*token);
 		*token = NULL;
 		return (0);
 	}
