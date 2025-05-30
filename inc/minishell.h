@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/29 13:43:15 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:12:23 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	sig_handler(int sig);
 void	free_redir(t_redir *redir);
 void	free_simple_cmd_exec(t_simple_cmds *cmd);
 void	free_minishell(t_shell *shell);
+void	init_shell_struct(t_shell *shell);
 
 
 #endif

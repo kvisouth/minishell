@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/30 13:44:08 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:11:26 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	start_minishell(t_shell *shell)
 	if (!lexer(shell))
 	{
 		free(shell->lexer.new_cmdline);
-		free(shell->lexer.tokens);
+		free_tab(shell->lexer.tokens);
 		return (free(shell->cmdline));
 	}
 	if (!expand_tokens(shell))
@@ -79,6 +79,7 @@ int	main(int ac, char **av, char **envp)
 
 	if (ac != 1 && av)
 		return (1);
+	init_shell_struct(&shell);
 	shell.env = NULL;
 	shell.env = init_shell_env(envp);
 	if (!shell.env)
