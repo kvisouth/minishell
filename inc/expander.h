@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:49:47 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/23 15:47:00 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:27:31 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ char		*replace_variable(char *token, t_expand *exp);
 void		init_expand(t_expand *exp);
 char		*remove_quotes(char *str);
 char		*replace_variable(char *token, t_expand *exp);
+void		free_expander(t_shell *shell);
 #endif

@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 13:42:00 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/30 13:43:20 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:25:47 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,30 @@ void	free_simple_cmd_exec(t_simple_cmds *cmd)
 
 void	free_minishell(t_shell *shell)
 {
-	t_simple_cmds	*tmp;
+    t_simple_cmds	*tmp;
 
-	free(shell->cmdline);
-	free_tab(shell->lexer.tokens);
-	free(shell->lexer.new_cmdline);
-	while (shell->simple_cmds)
-	{
-		tmp = shell->simple_cmds->next;
-		free_simple_cmd_exec(shell->simple_cmds);
-		shell->simple_cmds = tmp;
-	}
+    free(shell->cmdline);
+    shell->cmdline = NULL;
+    free_tab(shell->lexer.tokens);
+    shell->lexer.tokens = NULL;
+    free(shell->lexer.new_cmdline);
+    shell->lexer.new_cmdline = NULL;
+    while (shell->simple_cmds)
+    {
+        tmp = shell->simple_cmds->next;
+        free_simple_cmd_exec(shell->simple_cmds);
+        shell->simple_cmds = tmp;
+    }
+}
+void free_expander(t_shell *shell)
+{
+	if (shell->lexer.new_cmdline)
+		free(shell->lexer.new_cmdline);
+	if (shell->cmdline)
+		free(shell->cmdline);
+	if (shell->lexer.tokens)
+		free_tab(shell->lexer.tokens);
+	shell->lexer.tokens = NULL;
+	shell->cmdline = NULL;
+	shell->lexer.new_cmdline = NULL;
 }
