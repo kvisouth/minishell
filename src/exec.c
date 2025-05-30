@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/28 13:33:44 by kevso            ###   ########.fr       */
+/*   Updated: 2025/05/30 13:12:48 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,16 +466,11 @@ void	unlink_heredoc(void)
 
 int	exec(t_shell *shell)
 {
-	int	restore_stdout;
-
-	restore_stdout = dup(STDOUT_FILENO);
 	count_cmds(shell);
 	format_cmds(shell);
 	if (!process_all_heredocs(shell))
 	{
 		unlink_heredoc();
-		dup2(restore_stdout, STDOUT_FILENO);
-		close(restore_stdout);
 		return (0);
 	}
 	if (shell->nb_cmds > 1)
@@ -487,8 +482,6 @@ int	exec(t_shell *shell)
 		else
 			execute_command(shell, shell->simple_cmds);
 	}
-	dup2(restore_stdout, STDOUT_FILENO);
-	close(restore_stdout);
 	unlink_heredoc();
 	return (0);
 }
