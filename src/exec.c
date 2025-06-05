@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/30 13:12:48 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/04 15:01:44 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,7 +317,7 @@ void	handle_child_process(t_shell *shell,
 	exit(0);
 }
 
-void	handle_parent_process(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
+void	close_and_reset_pipes(int *prev_fd, int pipefd[2], t_simple_cmds *cmd)
 {
 	if (*prev_fd != -1)
 		close(*prev_fd);
@@ -388,10 +388,7 @@ void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 	if (cmd->pid == -1)
 		exit(1);
 	if (cmd->pid == 0)
-	{
-		set_signals_for_child();
 		handle_child_process(shell, cmd, prev_fd, NULL);
-	}
 	if (cmd->next)
 	{
 		close(pipefd[1]);
@@ -401,13 +398,6 @@ void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 		prev_fd = -1;
 	wait_for_command();
 	reset_signals_for_parent();
-}
-
-void	init_pipeline(int *prev_fd, t_simple_cmds **cmd, t_shell *shell)
-{
-	*prev_fd = -1;
-	*cmd = shell->simple_cmds;
-	set_signals_for_parent_with_children();
 }
 
 void	create_pipe_for_cmd(t_simple_cmds *cmd, int pipefd[2])
@@ -426,10 +416,7 @@ void	fork_and_execute_cmd(t_shell *shell, t_simple_cmds *cmd,
 	if (cmd->pid == -1)
 		exit(1);
 	if (cmd->pid == 0)
-	{
-		set_signals_for_child();
 		handle_child_process(shell, cmd, prev_fd, pipefd);
-	}
 }
 
 void	execute_pipeline(t_shell *shell)
@@ -439,12 +426,14 @@ void	execute_pipeline(t_shell *shell)
 	t_simple_cmds	*cmd;
 	int				last_pid;
 
-	init_pipeline(&prev_fd, &cmd, shell);
+	prev_fd = -1;
+	cmd = shell->simple_cmds;
+	set_signals_for_parent_with_children();
 	while (cmd)
 	{
 		create_pipe_for_cmd(cmd, pipefd);
 		fork_and_execute_cmd(shell, cmd, prev_fd, pipefd);
-		handle_parent_process(&prev_fd, pipefd, cmd);
+		close_and_reset_pipes(&prev_fd, pipefd, cmd);
 		if (!cmd->next)
 			last_pid = cmd->pid;
 		cmd = cmd->next;
