@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:23 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/30 15:26:16 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:23:15 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,30 @@ int	g_sig = 0;
 
 void	start_minishell(t_shell *shell)
 {
-    shell->end = false;
-    if (!lexer(shell))
-    {
-        free(shell->lexer.new_cmdline);
-        shell->lexer.new_cmdline = NULL;
-        free_tab(shell->lexer.tokens);
-        shell->lexer.tokens = NULL;
-        free(shell->cmdline);
-        shell->cmdline = NULL;
-        return;
-    }
-    if (!expand_tokens(shell))
-    {
-        free_expander(shell);
-        return ;
-    }
-    if (!parser(shell))
-    {
-        free_minishell(shell);
-        return ;
-    }
-    if (!exec(shell))
-        return (free_minishell(shell));
-    free_minishell(shell);
+	shell->end = false;
+	if (!lexer(shell))
+	{
+		free(shell->lexer.new_cmdline);
+		shell->lexer.new_cmdline = NULL;
+		free_tab(shell->lexer.tokens);
+		shell->lexer.tokens = NULL;
+		free(shell->cmdline);
+		shell->cmdline = NULL;
+		return ;
+	}
+	if (!expand_tokens(shell))
+	{
+		free_expander(shell);
+		return ;
+	}
+	if (!parser(shell))
+	{
+		free_minishell(shell);
+		return ;
+	}
+	if (!exec(shell))
+		return (free_minishell(shell));
+	free_minishell(shell);
 }
 
 void	sig_handler(int sig)

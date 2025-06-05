@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/04 15:01:44 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/05 13:21:41 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -474,7 +474,3 @@ int	exec(t_shell *shell)
 	unlink_heredoc();
 	return (0);
 }
-
-// TODO : les fichiers heredoc ne sont pas supprimés si interrompu avec ctrl+c
-// LEAKS : ctrl+c heredoc
-// LEAKS : ' '
