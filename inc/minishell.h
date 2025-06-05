@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/30 15:12:23 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:27:13 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,20 @@
 # include "exec.h"
 # include "expander.h"
 
-extern int g_sig; // Global variable to store the exit status
+extern int	g_sig; // Global variable to store the exit status
 
 typedef struct s_shell
 {
-	bool	end;
-	char	**env;
-	char	*cmdline;
-	char	*new_cmdline;
-	int		nb_cmds;
-	char	*path;
-	int		pipefd[2];
-	t_lexer	lexer;
+	bool			end;
+	char			**env;
+	char			*cmdline;
+	char			*new_cmdline;
+	int				nb_cmds;
+	char			*path;
+	int				pipefd[2];
+	t_lexer			lexer;
 	t_simple_cmds	*simple_cmds;
-    t_parser		parser;
+	t_parser		parser;
 }	t_shell;
 
 char	**init_shell_env(char **envp);
@@ -59,6 +59,5 @@ void	free_redir(t_redir *redir);
 void	free_simple_cmd_exec(t_simple_cmds *cmd);
 void	free_minishell(t_shell *shell);
 void	init_shell_struct(t_shell *shell);
-
 
 #endif

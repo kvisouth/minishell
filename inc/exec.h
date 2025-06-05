@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/22 20:15:03 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:26:28 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,21 @@
 
 # include "../inc/minishell.h"
 
-typedef struct s_shell t_shell;
+typedef struct s_shell	t_shell;
 
-int	add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd);
-int	exec(t_shell *shell);
+int		add_path_to_cmd(t_shell *shell, t_simple_cmds *cmd);
+int		exec(t_shell *shell);
 // int	execute_command(t_shell *shell, t_simple_cmds *cmd);
 
 /* BUILT-IN */
-int	    builtin_echo(char **args);
+int		builtin_echo(char **args);
 void	builtin_env(char **env);
 void	builtin_pwd(void);
-int     builtin_cd(t_shell *shell, t_simple_cmds *cmd);
+int		builtin_cd(t_shell *shell, t_simple_cmds *cmd);
 int		builtin_unset(t_shell *shell, t_simple_cmds *cmd);
-int 	builtin_export(t_shell *shell, t_simple_cmds *cmd);
+int		builtin_export(t_shell *shell, t_simple_cmds *cmd);
 void	builtin_exit(char **args);
 char	**copy_envp(char **envp);
-
-char		*expand_heredoc_line(char *line, char **env);
+char	*expand_heredoc_line(char *line, char **env);
 
 #endif
