@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 13:42:00 by abreuil           #+#    #+#             */
-/*   Updated: 2025/06/06 14:02:52 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 15:22:59 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ void	free_minishell(t_shell *shell)
 {
 	t_simple_cmds	*tmp;
 
-	if (shell->heredoc_flag)
+	if (shell->heredoc_flag && shell->simple_cmds
+		&& shell->simple_cmds->redirects
+		&& shell->simple_cmds->redirects->heredoc_file)
 		free(shell->simple_cmds->redirects->heredoc_file);
 	free(shell->cmdline);
 	shell->cmdline = NULL;
