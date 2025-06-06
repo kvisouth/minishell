@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/05 15:13:43 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 13:20:06 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,16 +122,35 @@ void	write_end_of_heredoc(int fd, char *expanded)
 	write(fd, "\n", 1);
 }
 
+static int	heredoc_fd_manager(int set, int value)
+{
+	static int	fd = -1;
+
+	if (set)
+		fd = value;
+	return (fd);
+}
+
+void	heredoc_sigint_handler(int sig)
+{
+	int	fd;
+
+	fd = heredoc_fd_manager(0, 0);
+	if (fd != -1)
+		close(fd);
+	exit(130);
+	(void)sig;
+}
+
 void	child_process_heredoc(char *delimiter, char *filename, t_shell *shell)
 {
 	int		fd;
 	char	*line;
 	char	*expanded;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, heredoc_sigint_handler);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		exit(1);
+	heredoc_fd_manager(1, fd);
 	while (1)
 	{
 		line = readline("> ");
