@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 14:19:43 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/05 13:27:13 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 14:01:22 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_shell
 	int				nb_cmds;
 	char			*path;
 	int				pipefd[2];
+	int				heredoc_flag;
 	t_lexer			lexer;
 	t_simple_cmds	*simple_cmds;
 	t_parser		parser;

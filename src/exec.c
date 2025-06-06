@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 13:20:06 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 14:06:25 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ int	process_one_heredoc(t_redir *redir, t_shell *shell)
 		return (0);
 	}
 	redir->heredoc_file = filename;
+	shell->heredoc_flag = 1;
 	return (1);
 }
 
@@ -479,6 +480,7 @@ int	exec(t_shell *shell)
 	if (!process_all_heredocs(shell))
 	{
 		unlink_heredoc();
+		free_minishell(shell);
 		return (0);
 	}
 	if (shell->nb_cmds > 1)

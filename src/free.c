@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 13:42:00 by abreuil           #+#    #+#             */
-/*   Updated: 2025/06/06 12:53:15 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 14:02:52 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	free_redir(t_redir *redir)
 		tmp = redir->next;
 		if (redir->file)
 			free(redir->file);
-		if (redir->heredoc_file)
-			free(redir->heredoc_file);
 		free(redir);
 		redir = tmp;
 	}
@@ -43,6 +41,8 @@ void	free_minishell(t_shell *shell)
 {
 	t_simple_cmds	*tmp;
 
+	if (shell->heredoc_flag)
+		free(shell->simple_cmds->redirects->heredoc_file);
 	free(shell->cmdline);
 	shell->cmdline = NULL;
 	free_tab(shell->lexer.tokens);
