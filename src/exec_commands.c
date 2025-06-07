@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:17:21 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/07 01:30:42 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/07 12:43:02 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,6 @@ void	handle_child_process(t_shell *shell,
 	exit(0);
 }
 
-/* Setup pipefds for the next command in the pipeline. */
-void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
-{
-	if (cmd->next)
-	{
-		if (pipe(pipefd) == -1)
-			exit(1);
-	}
-}
-
 /*
 Wait for the command to finish and update the global signal variable.
 If the command exits normally (WIFEXITED), it updates g_sig with the exit status
@@ -89,22 +79,15 @@ void	wait_for_command(void)
 
 void	execute_command(t_shell *shell, t_simple_cmds *cmd)
 {
-	int	pipefd[2];
 	int	prev_fd;
 
 	prev_fd = -1;
-	setup_pipes(cmd, pipefd);
 	set_signals_for_parent_with_children();
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 		exit(1);
 	if (cmd->pid == 0)
 		handle_child_process(shell, cmd, prev_fd, NULL);
-	if (cmd->next)
-	{
-		close(pipefd[1]);
-		prev_fd = pipefd[0];
-	}
 	else
 		prev_fd = -1;
 	wait_for_command();
