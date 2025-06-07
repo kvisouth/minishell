@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:39:40 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 19:24:03 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/07 12:13:48 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,10 @@ int	count_cd_args(t_simple_cmds *cmd)
 	return (i);
 }
 
+/*
+getcwd gets the current working directory and stores it in the 1st arg
+chdir changes the current working directory
+*/
 int	builtin_cd(t_shell *shell, t_simple_cmds *cmd)
 {
 	char	cwd[1024];
