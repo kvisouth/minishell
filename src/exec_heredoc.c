@@ -6,12 +6,13 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:11:42 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:15:03 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 23:00:08 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/* Storing fd in a static to be able to close it on SIGINT (getter/setter) */
 static int	heredoc_fd_manager(int set, int value)
 {
 	static int	fd = -1;
@@ -21,6 +22,7 @@ static int	heredoc_fd_manager(int set, int value)
 	return (fd);
 }
 
+/* Closes the fd and exits with status 130 on SIGINT */
 void	heredoc_sigint_handler(int sig)
 {
 	int	fd;
@@ -28,10 +30,12 @@ void	heredoc_sigint_handler(int sig)
 	fd = heredoc_fd_manager(0, 0);
 	if (fd != -1)
 		close(fd);
-	exit(130);
+	g_sig = 130;
+	exit(g_sig);
 	(void)sig;
 }
 
+/* Exits the loop when the delimiter is found */
 void	child_process_heredoc(char *delimiter, char *filename, t_shell *shell)
 {
 	int		fd;
@@ -61,6 +65,9 @@ void	child_process_heredoc(char *delimiter, char *filename, t_shell *shell)
 	exit(0);
 }
 
+/*
+WIFSIGNALED checks if the child process was terminated by a signal
+*/
 int	process_one_heredoc(t_redir *redir, t_shell *shell)
 {
 	pid_t	heredoc_pid;
@@ -89,6 +96,7 @@ int	process_one_heredoc(t_redir *redir, t_shell *shell)
 	return (1);
 }
 
+/* Loops to process all heredocs in every commands */
 int	process_all_heredocs(t_shell *shell)
 {
 	t_simple_cmds	*cmd;

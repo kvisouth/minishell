@@ -6,12 +6,16 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:13:57 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:14:18 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 16:02:41 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/*
+Handle the ">" redirection."
+Redirects STDOUT to the specified file.
+*/
 void	handle_redir_out(t_redir *redir)
 {
 	int	fd;
@@ -23,6 +27,10 @@ void	handle_redir_out(t_redir *redir)
 	close(fd);
 }
 
+/*
+Handle the ">>" redirection.
+Redirects STDOUT to the specified file, appending to it.
+*/
 void	handle_redir_append(t_redir *redir)
 {
 	int	fd;
@@ -34,6 +42,10 @@ void	handle_redir_append(t_redir *redir)
 	close(fd);
 }
 
+/*
+Handle the "<" redirection.
+Redirects STDIN from the specified file.
+*/
 void	handle_redir_in(t_redir *redir)
 {
 	int	fd;
@@ -45,6 +57,12 @@ void	handle_redir_in(t_redir *redir)
 	close(fd);
 }
 
+/*
+Handle the "<<" redirection.
+Redirects STDIN from a heredoc file.
+The heredoc is handled separately before this function is called,
+this one justs opens the file and redirects STDIN to it.
+*/
 void	handle_redir_heredoc(t_redir *redir)
 {
 	int	fd;

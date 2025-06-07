@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:31:57 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:32:01 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 16:30:58 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	end(int code, bool kill, char *msg)
 	}
 }
 
+/* Check if the command has no path (does not contain '/', '.', or '~') */
 int	cmd_have_no_path(char *cmd)
 {
 	if (ft_strchr(cmd, '/') || ft_strchr(cmd, '.') || ft_strchr(cmd, '~'))
@@ -39,6 +40,7 @@ int	cmd_have_no_path(char *cmd)
 	return (1);
 }
 
+/* Count the number of simple commands in the shell structure */
 void	count_cmds(t_shell *shell)
 {
 	t_simple_cmds	*tmp;

@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:17:21 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:18:16 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/07 01:30:42 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ void	handle_execve_error(t_simple_cmds *cmd)
 		end(127, TRUE, "Error: command not found\n");
 }
 
+/*
+The main function that executes execve.
+- If there is a previous command in the pipeline (prev_fd) redirects it to stdin
+- If a pipe is already set up (pipefd), it redirects stdout to the pipe
+*/
 void	handle_child_process(t_shell *shell,
 		t_simple_cmds *cmd, int prev_fd, int pipefd[2])
 {
@@ -50,6 +55,7 @@ void	handle_child_process(t_shell *shell,
 	exit(0);
 }
 
+/* Setup pipefds for the next command in the pipeline. */
 void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
 {
 	if (cmd->next)
@@ -59,6 +65,12 @@ void	setup_pipes(t_simple_cmds *cmd, int pipefd[2])
 	}
 }
 
+/*
+Wait for the command to finish and update the global signal variable.
+If the command exits normally (WIFEXITED), it updates g_sig with the exit status
+If the command is terminated by a signal (WIFSIGNALED),
+it updates g_sig with 128 + signal number (WTERMSIG).
+*/
 void	wait_for_command(void)
 {
 	int		status;

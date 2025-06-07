@@ -6,12 +6,13 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:19:01 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:19:15 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/06 15:46:36 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/* Goes in the right function based on "cmd" */
 void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 {
 	if (ft_strcmp(cmd->str[0], "env") == 0)
@@ -30,6 +31,7 @@ void	exec_builtin(t_shell *shell, t_simple_cmds *cmd)
 		builtin_exit(cmd->str);
 }
 
+/* Saves stdin and stdout, and restores them after executing the builtin */
 void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 {
 	int	restore_stdin;
