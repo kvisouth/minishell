@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:48 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/25 14:31:29 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/07 12:55:17 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,3 @@ int	lexer(t_shell *shell)
 	}
 	return (1);
 }
-
-//TODO LIST :
-// - retirer les quotes des tokens : ls"caca" --> lscaca
-//    (ce qui est COLLER aux exterieurs des quotes)
