@@ -12,6 +12,7 @@ SRC		= 	src/builtin_cd.c \
 			src/exec_heredoc.c \
 			src/exec_pipes.c \
 			src/exec_redirections.c \
+			src/exec_redir_bltn.c \
 			src/exec_signals.c \
 			src/exec_utils.c \
 			src/expander.c \
