@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 16:18:59 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/29 13:41:09 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:34:35 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	add_argument(t_simple_cmds *cmd, char *word, int i)
 int	process_token(t_shell *shell, t_simple_cmds *cmd, int *i)
 {
 	char	*token;
-	t_redir	*redir;
 
 	token = peek_token(shell);
 	if (!token)
@@ -49,21 +48,9 @@ int	process_token(t_shell *shell, t_simple_cmds *cmd, int *i)
 	if (is_pipe(token))
 		return (0);
 	if (is_redirection(token))
-	{
-		redir = parse_redirection(shell);
-		if (!redir)
-			return (0);
-		if (!add_redirection(cmd, redir))
-			return (0);
-	}
+		return (process_redirection_token(shell, cmd));
 	else
-	{
-		if (!add_argument(cmd, token, *i))
-			return (0);
-		(*i)++;
-		next_token(shell);
-	}
-	return (1);
+		return (process_argument_token(shell, cmd, i));
 }
 
 void	free_redirections(t_redir *redir)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:11:05 by abreuil           #+#    #+#             */
-/*   Updated: 2025/03/14 18:06:23 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:24:37 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ int	is_redirection(char *token)
 {
 	if (!token)
 		return (0);
+	if ((token[0] == '"' && token[ft_strlen(token) - 1] == '"')
+		|| (token[0] == '\'' && token[ft_strlen(token) - 1] == '\''))
+		return (0);
 	return (!ft_strcmp(token, "<") || !ft_strcmp(token, ">")
 		|| !ft_strcmp(token, "<<") || !ft_strcmp(token, ">>"));
 }
@@ -25,6 +28,9 @@ int	is_redirection(char *token)
 int	is_pipe(char *token)
 {
 	if (!token)
+		return (0);
+	if ((token[0] == '"' && token[ft_strlen(token) - 1] == '"')
+		|| (token[0] == '\'' && token[ft_strlen(token) - 1] == '\''))
 		return (0);
 	return (!ft_strcmp(token, "|"));
 }

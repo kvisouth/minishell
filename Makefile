@@ -31,6 +31,7 @@ SRC		= 	src/builtin_cd.c \
 			src/parser_utils.c \
 			src/parser_utils2.c \
 			src/parser_utils3.c \
+			src/parser_utils4.c \
 			src/token_validator.c \
 			src/token_validator_2.c
 

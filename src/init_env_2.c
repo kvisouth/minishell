@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 15:09:49 by abreuil           #+#    #+#             */
-/*   Updated: 2025/06/05 13:24:11 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/08 13:24:58 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ void	init_shell_struct(t_shell *shell)
 	shell->lexer.tokens = NULL;
 	shell->lexer.token_count = 0;
 	shell->lexer.new_cmdline = NULL;
+	shell->lexer.inside_quotes = false;
+	shell->lexer.quote_char = '\0';
+	shell->parser.tokens = NULL;
+	shell->parser.token_count = 0;
+	shell->parser.token_index = 0;
+	shell->heredoc_flag = 0;
+	shell->lexer.new_cmdline = NULL;
+	shell->lexer.tokens = NULL;
+	shell->lexer.token_count = 0;
 	shell->lexer.inside_quotes = false;
 	shell->lexer.quote_char = '\0';
 }

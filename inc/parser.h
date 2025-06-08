@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:19:02 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/27 18:32:05 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/06/08 13:35:25 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,8 @@ t_redir			*create_redirection(char *token, char *target);
 t_simple_cmds	*prepare_simple_cmd(t_shell *shell, int *word_count);
 t_simple_cmds	*process_simple_cmd(t_shell *shell,
 					t_simple_cmds *cmd, int word_count);
+int				process_redirection_token(t_shell *shell, t_simple_cmds *cmd);
+int				process_argument_token(t_shell *shell,
+					t_simple_cmds *cmd, int *i);
 
 #endif
