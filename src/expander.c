@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 21:52:52 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/23 17:03:47 by kevisout         ###   ########.fr       */
+/*   Updated: 2025/06/08 13:49:57 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	expand_tokens(t_shell *shell)
 {
 	int		i;
 	char	*tmp;
-	char	*unquoted;
 
 	i = 0;
 	while (i < shell->lexer.token_count)
@@ -83,14 +82,6 @@ int	expand_tokens(t_shell *shell)
 		tmp = expand_token(shell->lexer.tokens[i], shell->env);
 		if (!tmp)
 			return (0);
-		if (!is_redirection(shell->lexer.tokens[i]))
-		{
-			unquoted = remove_quotes(tmp);
-			free(tmp);
-			if (!unquoted)
-				return (0);
-			tmp = unquoted;
-		}
 		free(shell->lexer.tokens[i]);
 		shell->lexer.tokens[i++] = tmp;
 	}
