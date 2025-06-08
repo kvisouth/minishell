@@ -6,7 +6,7 @@
 /*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:42:41 by abreuil           #+#    #+#             */
-/*   Updated: 2025/05/30 13:54:56 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:56:21 by abreuil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,26 @@ t_redir	*create_redirection(char *token, char *target)
 t_redir	*init_redirection(t_redir_type type, char *target)
 {
 	t_redir	*redir;
+	char	*unquoted_target;
 
 	redir = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir)
+		return (NULL);
+	unquoted_target = remove_quotes(target);
+	if (!unquoted_target)
 	{
 		free(redir);
-		redir = NULL;
 		return (NULL);
 	}
 	redir->type = type;
-	redir->file = ft_strdup(target);
+	redir->file = ft_strdup(unquoted_target);
+	free(unquoted_target);
 	if (!redir->file)
 	{
 		free(redir);
 		return (NULL);
 	}
+	redir->heredoc_file = NULL;
 	redir->next = NULL;
 	return (redir);
 }
