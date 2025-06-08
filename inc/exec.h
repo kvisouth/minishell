@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:13:24 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 14:32:41 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/08 18:40:06 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		builtin_unset(t_shell *shell, t_simple_cmds *cmd);
 int		builtin_export(t_shell *shell, t_simple_cmds *cmd);
 void	builtin_exit(char **args);
 char	**copy_envp(char **envp);
+int		handle_redirections_bltn(t_simple_cmds *cmd);
 
 /* UTILS */
 void	count_cmds(t_shell *shell);

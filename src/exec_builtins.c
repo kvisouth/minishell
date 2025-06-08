@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:19:01 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/06 15:46:36 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/08 18:39:43 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ void	execute_builtin(t_shell *shell, t_simple_cmds *cmd)
 
 	restore_stdin = dup(STDIN_FILENO);
 	restore_stdout = dup(STDOUT_FILENO);
-	handle_redirections(cmd);
-	exec_builtin(shell, cmd);
+	if (handle_redirections_bltn(cmd) == 0)
+		exec_builtin(shell, cmd);
+	else
+		end(1, FALSE, NULL);
 	dup2(restore_stdin, STDIN_FILENO);
 	dup2(restore_stdout, STDOUT_FILENO);
 	close(restore_stdin);
