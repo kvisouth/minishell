@@ -6,7 +6,7 @@
 /*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 14:58:12 by kevso             #+#    #+#             */
-/*   Updated: 2025/06/09 11:34:47 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/09 11:44:28 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ void	handle_quotes(char *cmdline, t_lexer *lex, int *i, int *j)
 /*
 Copy cmdline into new_cmdline while inserting spaces before and after op's
 1. check if last char is not space & last char is not op
-   if so : insert a space
+   if so : insert a space before the op
 2. while current char is op, copy it to new_cmdline
-3. if next char is not space, insert a space
-4. if current char is not op, copy it to new_cmdline
-5. if current char is op, repeat from step 1
+3. checks if next char is not space
+   if so : insert a space after the op
+4. else : copy.
 */
 void	handle_operators(char *cmdline, t_lexer *lex, int *i, int *j)
 {
