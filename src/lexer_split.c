@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abreuil <abreuil@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:53:04 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 16:03:37 by abreuil          ###   ########.fr       */
+/*   Updated: 2025/06/09 11:58:10 by kevso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ int	count_tokens(char *str, t_lexer *lex)
 	return (count_tokens_core(str, lex));
 }
 
+void	init_i_j_for_norm(int *i, int *j)
+{
+	*i = 0;
+	*j = 0;
+}
+
 /* Splits the cmdline into tokens from every spaces exept those inside quotes */
 /* Takes the same logic than count_tokens, instead of counting, splits str.   */
 char	**split_tokens(char *str, t_lexer *lex)
@@ -76,16 +82,17 @@ char	**split_tokens(char *str, t_lexer *lex)
 	tokens = malloc(sizeof(char *) * (lex->token_count + 1));
 	if (!tokens)
 		return (NULL);
-	i = 0;
-	j = 0;
+	init_i_j_for_norm(&i, &j);
 	lex->quote_char = '\0';
 	lex->inside_quotes = false;
 	while (str[i])
 	{
-		while (str[i] && (str[i] == ' ' && !lex->inside_quotes))
+		while (str[i] && ((str[i] == ' ' || str[i] == '\t')
+				&& !lex->inside_quotes))
 			i++;
 		start = i;
-		while (str[i] && (lex->inside_quotes || str[i] != ' '))
+		while (str[i] && (lex->inside_quotes
+				|| (str[i] != ' ' && str[i] != '\t')))
 			update_quote_status(lex, str[i++]);
 		if (i > start)
 			tokens[j++] = ft_substr(str, start, i - start);
