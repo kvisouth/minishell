@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kevso <kevso@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kevisout <kevisout@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:46:29 by kevso             #+#    #+#             */
-/*   Updated: 2025/05/09 17:56:50 by kevso            ###   ########.fr       */
+/*   Updated: 2025/06/09 18:02:18 by kevisout         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ int	check_exit_arg(char *arg)
 	return (1);
 }
 
+int	count_exit_args(char **args)
+{
+	int	cpt;
+
+	cpt = 0;
+	while (args[cpt])
+		cpt++;
+	return (cpt);
+}
+
 /*
 Multiple arguments : no exit, g_sig = 1
 argument not a number : exit, g_sig = 2
@@ -39,7 +49,7 @@ void	builtin_exit(char **arg)
 	int		exit_code;
 
 	exit_code = g_sig;
-	if (arg[2])
+	if (count_exit_args(arg) > 2)
 	{
 		ft_putstr_fd("exit: too many arguments\n", 2);
 		g_sig = 1;
